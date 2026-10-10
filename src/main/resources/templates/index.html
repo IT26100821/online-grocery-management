@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GreenMart - Online Grocery Store</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f4;
+        }
+
+        .navbar {
+            background: #198754;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 10px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: #d1e7dd;
+        }
+
+        .hero h1 {
+            color: #146c43;
+            font-size: 40px;
+        }
+
+        .btn {
+            background: #198754;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .products {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .product-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .product-card {
+            background: white;
+            padding: 25px;
+            width: 220px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px #ddd;
+        }
+
+        .product-card h3 {
+            color: #198754;
+        }
+
+        footer {
+            text-align: center;
+            background: #198754;
+            color: white;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+
+    <h2>🛒 GreenMart</h2>
+
+    <div>
+        <a href="/">Home</a>
+        <a href="#products">Products</a>
+        <a href="#about">About</a>
+    </div>
+
+</div>
+
+<!-- Home Section -->
+<section class="hero">
+
+    <h1>Welcome to GreenMart!</h1>
+
+    <p>Fresh Groceries Delivered to Your Doorstep</p>
+
+    <a href="#products">
+        <button class="btn">Shop Now</button>
+    </a>
+
+</section>
+
+<!-- Products Section -->
+<section class="products" id="products">
+
+    <h2>Our Grocery Products</h2>
+
+    <div class="product-container">
+
+        <div class="product-card">
+            <h1>🍚</h1>
+            <h3>Rice 1kg</h3>
+            <p>Rs. 250.00</p>
+            <button class="btn">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <h1>🥛</h1>
+            <h3>Fresh Milk</h3>
+            <p>Rs. 450.00</p>
+            <button class="btn">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <h1>🥥</h1>
+            <h3>Coconut</h3>
+            <p>Rs. 150.00</p>
+            <button class="btn">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <h1>🍎</h1>
+            <h3>Apple</h3>
+            <p>Rs. 300.00</p>
+            <button class="btn">Add to Cart</button>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="products" id="about">
+    <h2>About GreenMart</h2>
+    <p>Your trusted online grocery shopping destination.</p>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>© 2026 GreenMart. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>
