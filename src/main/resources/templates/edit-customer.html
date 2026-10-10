@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GreenMart - Edit Customer</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f4;
+        }
+
+        .navbar {
+            background: #198754;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .navbar h2 {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #ddd;
+        }
+
+        h1 {
+            color: #198754;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            background: #198754;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            margin-top: 25px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #146c43;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 25px;
+            color: #198754;
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <h2>🛒 GreenMart Admin</h2>
+</div>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>✏️ Edit Customer</h1>
+
+        <form th:action="@{/customers/update/{id}(id=${customer.id})}"
+              method="post">
+
+            <label>Customer Full Name</label>
+
+            <input type="text"
+                   name="fullName"
+                   th:value="${customer.fullName}"
+                   required>
+
+            <label>Email Address</label>
+
+            <input type="email"
+                   name="email"
+                   th:value="${customer.email}"
+                   required>
+
+            <label>Phone Number</label>
+
+            <input type="tel"
+                   name="phone"
+                   th:value="${customer.phone}"
+                   required>
+
+            <button type="submit">
+                Update Customer
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="/customers" class="back">
+            ← Back to Customers
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
