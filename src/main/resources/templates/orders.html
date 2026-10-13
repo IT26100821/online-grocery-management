@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GreenMart - Order Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f4;
+        }
+
+        .navbar {
+            background: #198754;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            margin: 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #198754;
+        }
+
+        .navbar h2 {
+            color: white;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #ddd;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            background: #198754;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background: #198754;
+            color: white;
+            padding: 14px;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .edit-btn {
+            background: #ffc107;
+            color: black;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            padding: 10px 15px;
+            margin-top: 0;
+        }
+
+        .error {
+            color: #b42318;
+            background: #fff0ee;
+            padding: 12px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+
+    <h2>🛒 GreenMart Admin</h2>
+
+    <a href="/dashboard">
+        Back to Dashboard
+    </a>
+
+</div>
+
+<div class="container">
+
+    <h1>📦 Order Management</h1>
+
+    <p>Manage customer grocery orders</p>
+
+    <p class="error"
+       th:if="${error}"
+       th:text="${error}">
+    </p>
+
+    <!-- Add Order Form -->
+    <div class="card">
+
+        <h2>Add New Order</h2>
+
+        <form th:action="@{/orders/add}"
+              method="post">
+
+            <!-- Select Customer -->
+            <label>Select Customer</label>
+
+            <select name="customerId" required>
+
+                <option value="" selected disabled>
+                    Select Customer
+                </option>
+
+                <option th:each="customer : ${customers}"
+                        th:value="${customer.id}"
+                        th:text="${customer.fullName}">
+                </option>
+
+            </select>
+
+            <!-- Select Product -->
+            <label>Select Product</label>
+
+            <select name="productId" required>
+
+                <option value="" selected disabled>
+                    Select Product
+                </option>
+
+                <option th:each="product : ${products}"
+                        th:value="${product.id}"
+                        th:text="${product.name}">
+                </option>
+
+            </select>
+
+            <!-- Quantity -->
+            <label>Order Quantity</label>
+
+            <input type="number"
+                   name="quantity"
+                   min="1"
+                   step="1"
+                   placeholder="Enter quantity"
+                   required>
+
+            <button type="submit">
+                Add Order
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- Order List -->
+    <div class="card">
+
+        <h2>Order List</h2>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer ID</th>
+                    <th>Product ID</th>
+                    <th>Quantity</th>
+                    <th>Total (Rs.)</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <tr th:each="order : ${orders}">
+
+                    <td th:text="${order.id}"></td>
+
+                    <td th:text="${order.customerId}"></td>
+
+                    <td th:text="${order.productId}"></td>
+
+                    <td th:text="${order.quantity}"></td>
+
+                    <td th:text="${order.totalPrice}"></td>
+
+                    <td th:text="${order.status}"></td>
+
+                    <td>
+
+                        <!-- Edit Button -->
+                        <a class="edit-btn"
+                           th:href="@{/orders/edit/{id}(id=${order.id})}">
+                            Edit
+                        </a>
+
+                        <!-- Delete Button -->
+                        <form th:action="@{/orders/delete/{id}(id=${order.id})}"
+                              method="post"
+                              style="display:inline-block;"
+                              onsubmit="return confirm('Delete this order?');">
+
+                            <button class="delete-btn"
+                                    type="submit">
+                                Delete
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(orders)}">
+
+                    <td colspan="7">
+                        No orders added yet.
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
