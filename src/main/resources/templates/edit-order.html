@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GreenMart - Edit Order</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f4;
+        }
+
+        .navbar {
+            background: #198754;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #ddd;
+        }
+
+        h1 {
+            color: #198754;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            background: #198754;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            margin-top: 25px;
+            cursor: pointer;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            color: #198754;
+            text-decoration: none;
+        }
+
+        .error {
+            color: #b42318;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <h2>🛒 GreenMart Admin</h2>
+</div>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>✏️ Edit Order</h1>
+
+        <p class="error"
+           th:if="${error}"
+           th:text="${error}">
+        </p>
+
+        <form th:action="@{/orders/update/{id}(id=${order.id})}"
+              method="post">
+
+            <!-- Customer -->
+            <label>Select Customer</label>
+
+            <select name="customerId" required>
+
+                <option th:each="customer : ${customers}"
+                        th:value="${customer.id}"
+                        th:text="${customer.fullName}"
+                        th:selected="${customer.id == order.customerId}">
+                </option>
+
+            </select>
+
+            <!-- Product -->
+            <label>Select Product</label>
+
+            <select name="productId" required>
+
+                <option th:each="product : ${products}"
+                        th:value="${product.id}"
+                        th:text="${product.name}"
+                        th:selected="${product.id == order.productId}">
+                </option>
+
+            </select>
+
+            <!-- Quantity -->
+            <label>Order Quantity</label>
+
+            <input type="number"
+                   name="quantity"
+                   min="1"
+                   step="1"
+                   th:value="${order.quantity}"
+                   required>
+
+            <!-- Order Status -->
+            <label>Order Status</label>
+
+            <select name="status" required>
+
+                <option value="Pending"
+                        th:selected="${order.status == 'Pending'}">
+                    Pending
+                </option>
+
+                <option value="Confirmed"
+                        th:selected="${order.status == 'Confirmed'}">
+                    Confirmed
+                </option>
+
+                <option value="Delivered"
+                        th:selected="${order.status == 'Delivered'}">
+                    Delivered
+                </option>
+
+                <option value="Cancelled"
+                        th:selected="${order.status == 'Cancelled'}">
+                    Cancelled
+                </option>
+
+            </select>
+
+            <button type="submit">
+                Update Order
+            </button>
+
+        </form>
+
+        <a href="/orders" class="back">
+            ← Back to Orders
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
