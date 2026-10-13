@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GreenMart - Payment Management</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f4;
+        }
+
+        .navbar {
+            background: #198754;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            margin: 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #198754;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #ddd;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            background: #198754;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background: #198754;
+            color: white;
+            padding: 14px;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .edit-btn {
+            background: #ffc107;
+            color: black;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            padding: 10px 15px;
+            margin-top: 0;
+        }
+
+        .error {
+            background: #ffe5e5;
+            color: #b42318;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            color: #666;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+
+    <h2>🛒 GreenMart Admin</h2>
+
+    <a href="/dashboard">
+        Back to Dashboard
+    </a>
+
+</div>
+
+<div class="container">
+
+    <h1>💳 Payment Management</h1>
+
+    <p class="info">
+        Manage grocery order payment records
+    </p>
+
+    <!-- Error Message -->
+    <p class="error"
+       th:if="${error}"
+       th:text="${error}">
+    </p>
+
+
+    <!-- Add Payment Form -->
+    <div class="card">
+
+        <h2>Add New Payment</h2>
+
+        <form th:action="@{/payments/add}"
+              method="post">
+
+            <!-- Select Order -->
+            <label>Select Order</label>
+
+            <select name="orderId" required>
+
+                <option value="" selected disabled>
+                    Select Order
+                </option>
+
+                <option th:each="order : ${orders}"
+                        th:value="${order.id}"
+                        th:text="|Order #${order.id} - Rs. ${order.totalPrice}|">
+                </option>
+
+            </select>
+
+            <!-- Payment Method -->
+            <label>Payment Method</label>
+
+            <select name="paymentMethod" required>
+
+                <option value="" selected disabled>
+                    Select Payment Method
+                </option>
+
+                <option value="Cash on Delivery">
+                    Cash on Delivery
+                </option>
+
+                <option value="Bank Transfer">
+                    Bank Transfer
+                </option>
+
+            </select>
+
+            <p class="info">
+                Payment amount will be calculated
+                automatically from the selected order.
+            </p>
+
+            <button type="submit">
+                Add Payment
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Payment List -->
+    <div class="card">
+
+        <h2>Payment Records</h2>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                <tr>
+                    <th>Payment ID</th>
+                    <th>Order ID</th>
+                    <th>Amount (Rs.)</th>
+                    <th>Payment Method</th>
+                    <th>Payment Status</th>
+                    <th>Actions</th>
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                <!-- Display Payments -->
+                <tr th:each="payment : ${payments}">
+
+                    <td th:text="${payment.id}">
+                    </td>
+
+                    <td th:text="${payment.orderId}">
+                    </td>
+
+                    <td th:text="${payment.amount}">
+                    </td>
+
+                    <td th:text="${payment.paymentMethod}">
+                    </td>
+
+                    <td th:text="${payment.paymentStatus}">
+                    </td>
+
+                    <td>
+
+                        <!-- Edit Button -->
+                        <a class="edit-btn"
+                           th:href="@{/payments/edit/{id}(id=${payment.id})}">
+                            Edit
+                        </a>
+
+                        <!-- Delete Button -->
+                        <form th:action="@{/payments/delete/{id}(id=${payment.id})}"
+                              method="post"
+                              style="display:inline-block;"
+                              onsubmit="return confirm('Delete this payment?');">
+
+                            <button class="delete-btn"
+                                    type="submit">
+                                Delete
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                <!-- Empty Payment List -->
+                <tr th:if="${#lists.isEmpty(payments)}">
+
+                    <td colspan="6">
+                        No payments added yet.
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

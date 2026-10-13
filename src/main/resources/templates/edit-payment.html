@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GreenMart - Edit Payment</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f4;
+        }
+
+        .navbar {
+            background: #198754;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .navbar h2 {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #ddd;
+        }
+
+        h1 {
+            color: #198754;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            background: #198754;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            margin-top: 25px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #146c43;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            color: #198754;
+            text-decoration: none;
+        }
+
+        .info {
+            color: #666;
+        }
+
+        .error {
+            background: #ffe5e5;
+            color: #b42318;
+            padding: 12px;
+            border-radius: 6px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- Navigation Bar -->
+
+<div class="navbar">
+    <h2>🛒 GreenMart Admin</h2>
+</div>
+
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>💳 Edit Payment</h1>
+
+        <p class="info">
+            Update payment details
+        </p>
+
+        <!-- Error Message -->
+
+        <p class="error"
+           th:if="${error}"
+           th:text="${error}">
+        </p>
+
+
+        <!-- Edit Payment Form -->
+
+        <form th:action="@{/payments/update/{id}(id=${payment.id})}"
+              method="post">
+
+            <!-- Select Order -->
+
+            <label>Select Order</label>
+
+            <select name="orderId" required>
+
+                <option th:each="order : ${orders}"
+                        th:value="${order.id}"
+                        th:text="|Order #${order.id} - Rs. ${order.totalPrice}|"
+                        th:selected="${order.id == payment.orderId}">
+                </option>
+
+            </select>
+
+
+            <!-- Payment Method -->
+
+            <label>Payment Method</label>
+
+            <select name="paymentMethod" required>
+
+                <option value="Cash on Delivery"
+                        th:selected="${payment.paymentMethod == 'Cash on Delivery'}">
+                    Cash on Delivery
+                </option>
+
+                <option value="Bank Transfer"
+                        th:selected="${payment.paymentMethod == 'Bank Transfer'}">
+                    Bank Transfer
+                </option>
+
+            </select>
+
+
+            <!-- Payment Status -->
+
+            <label>Payment Status</label>
+
+            <select name="paymentStatus" required>
+
+                <option value="Pending"
+                        th:selected="${payment.paymentStatus == 'Pending'}">
+                    Pending
+                </option>
+
+                <option value="Paid"
+                        th:selected="${payment.paymentStatus == 'Paid'}">
+                    Paid
+                </option>
+
+                <option value="Cancelled"
+                        th:selected="${payment.paymentStatus == 'Cancelled'}">
+                    Cancelled
+                </option>
+
+            </select>
+
+
+            <p class="info">
+                Payment amount will be updated
+                automatically based on the selected order.
+            </p>
+
+
+            <!-- Update Button -->
+
+            <button type="submit">
+                Update Payment
+            </button>
+
+        </form>
+
+
+        <!-- Back Button -->
+
+        <a href="/payments" class="back">
+            ← Back to Payments
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
