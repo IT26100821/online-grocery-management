@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GreenMart - Edit Delivery</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f4;
+        }
+
+        .navbar {
+            background: #198754;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            margin: 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #ddd;
+        }
+
+        h1 {
+            color: #198754;
+            text-align: center;
+        }
+
+        .info {
+            color: #666;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            background: #198754;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            margin-top: 25px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #146c43;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            color: #198754;
+            text-decoration: none;
+        }
+
+        .error {
+            background: #ffe5e5;
+            color: #b42318;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+    <h2>🛒 GreenMart Admin</h2>
+    <a href="/dashboard">Dashboard</a>
+</div>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>🚚 Edit Delivery</h1>
+
+        <p class="info">
+            Update delivery details and status
+        </p>
+
+        <!-- Error Message -->
+        <p class="error"
+           th:if="${error}"
+           th:text="${error}">
+        </p>
+
+        <!-- Edit Delivery Form -->
+        <form th:action="@{/deliveries/update/{id}(id=${delivery.id})}"
+              method="post">
+
+            <!-- Select Order -->
+            <label for="orderId">
+                Select Order
+            </label>
+
+            <select id="orderId"
+                    name="orderId"
+                    required>
+
+                <option th:each="order : ${orders}"
+                        th:value="${order.id}"
+                        th:text="|Order #${order.id}|"
+                        th:selected="${order.id == delivery.orderId}">
+                </option>
+
+            </select>
+
+            <!-- Delivery Address -->
+            <label for="deliveryAddress">
+                Delivery Address
+            </label>
+
+            <input type="text"
+                   id="deliveryAddress"
+                   name="deliveryAddress"
+                   th:value="${delivery.deliveryAddress}"
+                   maxlength="200"
+                   required>
+
+            <!-- Delivery Date -->
+            <label for="deliveryDate">
+                Delivery Date
+            </label>
+
+            <input type="date"
+                   id="deliveryDate"
+                   name="deliveryDate"
+                   th:value="${delivery.deliveryDate}"
+                   required>
+
+            <!-- Delivery Status -->
+            <label for="deliveryStatus">
+                Delivery Status
+            </label>
+
+            <select id="deliveryStatus"
+                    name="deliveryStatus"
+                    required>
+
+                <option value="Pending"
+                        th:selected="${delivery.deliveryStatus == 'Pending'}">
+                    Pending
+                </option>
+
+                <option value="Out for Delivery"
+                        th:selected="${delivery.deliveryStatus == 'Out for Delivery'}">
+                    Out for Delivery
+                </option>
+
+                <option value="Delivered"
+                        th:selected="${delivery.deliveryStatus == 'Delivered'}">
+                    Delivered
+                </option>
+
+                <option value="Cancelled"
+                        th:selected="${delivery.deliveryStatus == 'Cancelled'}">
+                    Cancelled
+                </option>
+
+            </select>
+
+            <!-- Update Button -->
+            <button type="submit">
+                Update Delivery
+            </button>
+
+        </form>
+
+        <!-- Back Button -->
+        <div>
+            <a href="/deliveries" class="back">
+                ← Back to Deliveries
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
