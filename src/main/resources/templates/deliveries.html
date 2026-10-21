@@ -193,7 +193,7 @@
 
                 <option th:each="order : ${orders}"
                         th:value="${order.id}"
-                        th:text="|Order #${order.id}|">
+                        th:text="${'Order #' + order.id}">
                 </option>
 
             </select>
