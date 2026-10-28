@@ -1,0 +1,529 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GreenMart | Customer Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #edf4ee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            color: #18382a;
+        }
+
+        .login-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            max-width: 1100px;
+            min-height: 650px;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 65px rgba(20,70,40,0.12);
+        }
+
+        /* LEFT SIDE */
+
+        .left-panel {
+            background: linear-gradient(
+                    145deg, #103b2b, #198754
+            );
+            color: white;
+            padding: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-panel::after {
+            content: "";
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 50%;
+            right: -160px;
+            bottom: 50px;
+            pointer-events: none;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 26px;
+            font-weight: 800;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-icon {
+            width: 52px;
+            height: 52px;
+            background: white;
+            color: #198754;
+            border-radius: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+        }
+
+        .brand span {
+            color: #a7ecae;
+        }
+
+        .hero {
+            position: relative;
+            z-index: 1;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.14);
+            color: #d6f8dd;
+            padding: 10px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            letter-spacing: 1.4px;
+            font-weight: 700;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 4vw, 48px);
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin: 25px 0 15px;
+        }
+
+        .hero h1 span {
+            color: #a7ecae;
+        }
+
+        .hero p {
+            color: #d5eadb;
+            line-height: 1.8;
+            font-size: 15px;
+            max-width: 390px;
+        }
+
+        .food-icons {
+            display: flex;
+            gap: 12px;
+            margin-top: 35px;
+        }
+
+        .food-item {
+            width: 75px;
+            height: 75px;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 19px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+        }
+
+        .left-footer {
+            color: #d0e7d6;
+            font-size: 13px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* RIGHT SIDE */
+
+        .right-panel {
+            padding: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-box {
+            width: 100%;
+            max-width: 370px;
+        }
+
+        .welcome-tag {
+            color: #198754;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .form-box h2 {
+            font-size: 34px;
+            letter-spacing: -1px;
+            margin: 15px 0 10px;
+        }
+
+        .subtitle {
+            color: #7a8c81;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 35px;
+        }
+
+        .field {
+            margin-bottom: 22px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 9px;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 15px 16px;
+            font-size: 14px;
+            border-radius: 11px;
+            background: #fbfdfb;
+            border: 1px solid #dbe6dd;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .field input:focus {
+            border-color: #198754;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(25,135,84,0.1);
+        }
+
+        .password-box {
+            position: relative;
+        }
+
+        .password-box input {
+            padding-right: 75px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            background: transparent;
+            color: #198754;
+            border: none;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: #198754;
+            color: white;
+            border: none;
+            border-radius: 11px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .login-btn:hover {
+            background: #146c43;
+            transform: translateY(-2px);
+        }
+
+        .bottom-links {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 14px;
+            color: #7a8c81;
+        }
+
+        .bottom-links a {
+            color: #198754;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .bottom-links a:hover {
+            text-decoration: underline;
+        }
+
+        .security-note {
+            text-align: center;
+            color: #95a69c;
+            font-size: 12px;
+            margin-top: 35px;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 9px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .error {
+            color: #b42318;
+            background: #fff0ef;
+        }
+
+        .success {
+            color: #146c43;
+            background: #e6f5eb;
+        }
+
+        /* MOBILE RESPONSIVE */
+
+        @media (max-width: 800px) {
+
+            .login-container {
+                grid-template-columns: 1fr;
+                max-width: 480px;
+            }
+
+            .left-panel {
+                min-height: 180px;
+                padding: 25px;
+            }
+
+            .hero h1 {
+                font-size: 26px;
+                margin: 14px 0 7px;
+            }
+
+            .hero p,
+            .food-icons,
+            .left-footer {
+                display: none;
+            }
+
+            .tag {
+                margin-top: 20px;
+            }
+
+            .right-panel {
+                padding: 35px 25px;
+            }
+
+            .form-box h2 {
+                font-size: 29px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <!-- LEFT PANEL -->
+
+    <section class="left-panel">
+
+        <div class="brand">
+            <div class="brand-icon">🛒</div>
+            <div>Green<span>Mart</span></div>
+        </div>
+
+        <div class="hero">
+
+            <div class="tag">
+                FRESH GROCERY SHOPPING
+            </div>
+
+            <h1>
+                Fresh groceries.<br>
+                <span>Happy living.</span>
+            </h1>
+
+            <p>
+                Discover fresh products, manage
+                your grocery orders and enjoy
+                a better shopping experience
+                with GreenMart.
+            </p>
+
+            <div class="food-icons">
+                <div class="food-item">🥦</div>
+                <div class="food-item">🍎</div>
+                <div class="food-item">🥕</div>
+                <div class="food-item">🥑</div>
+            </div>
+
+        </div>
+
+        <div class="left-footer">
+            Fresh groceries. Delivered with care. 🌿
+        </div>
+
+    </section>
+
+    <!-- RIGHT PANEL -->
+
+    <main class="right-panel">
+
+        <div class="form-box">
+
+            <div class="welcome-tag">
+                WELCOME TO GREENMART
+            </div>
+
+            <h2>Customer Sign In</h2>
+
+            <p class="subtitle">
+                Enter your account details
+                to continue shopping.
+            </p>
+
+
+            <!-- Registration Success Message -->
+            <div class="message success"
+                 style="display:none"
+                 th:if="${param.registered}"
+                 th:style="'display:block'">
+
+                Account created successfully!
+                Please sign in.
+
+            </div>
+
+            <!-- ERROR MESSAGE -->
+            <div class="message error"
+                 style="display:none"
+                 th:style="${param.error} ? 'display:block' : 'display:none'"
+                 th:if="${param.error}">
+                Invalid username or password.
+            </div>
+
+            <!-- LOGOUT MESSAGE -->
+            <div class="message success"
+                 style="display:none"
+                 th:style="${param.logout} ? 'display:block' : 'display:none'"
+                 th:if="${param.logout}">
+                You have logged out successfully.
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form th:action="@{/login}" method="post">
+
+                <div class="field">
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input type="text"
+                           id="username"
+                           name="username"
+                           placeholder="Enter your username"
+                           autocomplete="username"
+                           required>
+                </div>
+
+                <div class="field">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="password-box">
+
+                        <input type="password"
+                               id="password"
+                               name="password"
+                               placeholder="Enter your password"
+                               autocomplete="current-password"
+                               required>
+
+                        <button type="button"
+                                class="toggle-password"
+                                id="togglePassword">
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <button type="submit"
+                        class="login-btn">
+                    Sign In →
+                </button>
+
+            </form>
+
+            <div class="bottom-links">
+
+                <p>
+                    New to GreenMart?
+                    <a href="/customer/register">
+                        Create an Account
+                    </a>
+                </p>
+
+                <p>
+                    Are you an admin?
+                    <a href="/admin/login">
+                        Admin Login
+                    </a>
+                </p>
+
+            </div>
+
+            <div class="security-note">
+                🔒 GreenMart Customer Portal
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    const toggleButton =
+        document.getElementById("togglePassword");
+
+    const passwordInput =
+        document.getElementById("password");
+
+    toggleButton.addEventListener("click", function () {
+
+        const hidden =
+            passwordInput.type === "password";
+
+        passwordInput.type =
+            hidden ? "text" : "password";
+
+        toggleButton.textContent =
+            hidden ? "Hide" : "Show";
+
+        toggleButton.setAttribute(
+            "aria-label",
+            hidden ? "Hide password" : "Show password"
+        );
+    });
+</script>
+
+</body>
+</html>

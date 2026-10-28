@@ -1,0 +1,512 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GreenMart | Admin Login</title>
+
+    <style>
+        :root {
+            --green: #198754;
+            --dark: #103b2b;
+            --light: #f5f9f5;
+            --text: #18382a;
+            --muted: #7a8c81;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #edf4ee;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            color: var(--text);
+        }
+
+        .login-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            max-width: 1100px;
+            min-height: 650px;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 65px rgba(20, 70, 40, 0.12);
+        }
+
+        /* LEFT SIDE */
+        .left-panel {
+            background: linear-gradient(
+                    145deg, #103b2b, #16653f
+            );
+            color: white;
+            padding: 45px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .left-panel::after {
+            content: "";
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 50%;
+            right: -170px;
+            bottom: 60px;
+            pointer-events: none;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 25px;
+            font-weight: 800;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-icon {
+            background: white;
+            color: var(--green);
+            width: 50px;
+            height: 50px;
+            display: grid;
+            place-items: center;
+            border-radius: 14px;
+            font-size: 25px;
+        }
+
+        .brand span {
+            color: #a1ecad;
+        }
+
+        .hero {
+            position: relative;
+            z-index: 1;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 9px 16px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.12);
+            color: #c9f5d2;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 4vw, 47px);
+            line-height: 1.16;
+            margin: 25px 0 15px;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            color: #a7ecae;
+        }
+
+        .hero p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #d0e7d6;
+            max-width: 360px;
+        }
+
+        .grocery-icons {
+            display: flex;
+            gap: 12px;
+            margin-top: 35px;
+        }
+
+        .grocery-item {
+            width: 75px;
+            height: 75px;
+            border-radius: 19px;
+            background: rgba(255,255,255,0.12);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            border: 1px solid rgba(255,255,255,0.13);
+        }
+
+        .left-footer {
+            color: #b6d9c2;
+            font-size: 13px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* RIGHT SIDE */
+        .right-panel {
+            padding: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .form-box {
+            width: 100%;
+            max-width: 370px;
+        }
+
+        .welcome-tag {
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .form-box h2 {
+            font-size: 34px;
+            margin: 15px 0 10px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 35px;
+        }
+
+        .field {
+            margin-bottom: 22px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 9px;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 15px 16px;
+            font-size: 14px;
+            border-radius: 11px;
+            background: #fbfdfb;
+            border: 1px solid #dbe6dd;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .field input:focus {
+            border-color: var(--green);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(25,135,84,0.1);
+        }
+
+        .password-box {
+            position: relative;
+        }
+
+        .password-box input {
+            padding-right: 70px;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: var(--green);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 8px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--green);
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            border-radius: 11px;
+            cursor: pointer;
+            margin-top: 7px;
+            transition: 0.2s;
+        }
+
+        .login-btn:hover {
+            background: #146c43;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(25,135,84,0.2);
+        }
+
+        .bottom-link {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .bottom-link a {
+            color: var(--green);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .bottom-link a:hover {
+            text-decoration: underline;
+        }
+
+        .security {
+            text-align: center;
+            color: #95a69c;
+            font-size: 12px;
+            margin-top: 35px;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 9px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .error {
+            background: #fff0ef;
+            color: #b42318;
+        }
+
+        .success {
+            background: #e6f5eb;
+            color: #146c43;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 800px) {
+            .login-container {
+                grid-template-columns: 1fr;
+                max-width: 480px;
+            }
+
+            .left-panel {
+                padding: 25px;
+                min-height: 180px;
+            }
+
+            .hero h1 {
+                font-size: 26px;
+                margin: 14px 0 7px;
+            }
+
+            .hero p,
+            .grocery-icons,
+            .left-footer {
+                display: none;
+            }
+
+            .tag {
+                margin-top: 20px;
+            }
+
+            .right-panel {
+                padding: 35px 25px;
+            }
+
+            .form-box h2 {
+                font-size: 29px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <!-- LEFT DESIGN PANEL -->
+    <section class="left-panel">
+
+        <div class="brand">
+            <div class="brand-icon">🛒</div>
+            <div>Green<span>Mart</span></div>
+        </div>
+
+        <div class="hero">
+
+            <div class="tag">
+                GREENMART ADMIN PORTAL
+            </div>
+
+            <h1>
+                A fresher way<br>
+                to <span>manage your store.</span>
+            </h1>
+
+            <p>
+                Manage customers, products, orders,
+                payments and deliveries — all from
+                one powerful dashboard.
+            </p>
+
+            <div class="grocery-icons">
+                <div class="grocery-item">🥦</div>
+                <div class="grocery-item">🥕</div>
+                <div class="grocery-item">🍎</div>
+                <div class="grocery-item">🛍️</div>
+            </div>
+
+        </div>
+
+        <div class="left-footer">
+            Fresh ideas. Better management. 🌿
+        </div>
+
+    </section>
+
+    <!-- RIGHT LOGIN FORM -->
+    <main class="right-panel">
+
+        <div class="form-box">
+
+            <div class="welcome-tag">
+                WELCOME BACK
+            </div>
+
+            <h2>Admin Sign In</h2>
+
+            <p class="subtitle">
+                Enter your account details to
+                access the GreenMart dashboard.
+            </p>
+
+            <!-- LOGIN ERROR -->
+            <div class="message error"
+                 th:if="${param.error}">
+                Invalid username or password.
+            </div>
+
+            <!-- LOGOUT SUCCESS -->
+            <div class="message success"
+                 th:if="${param.logout}">
+                You have logged out successfully.
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form th:action="@{/login}" method="post">
+
+                <div class="field">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input type="text"
+                           id="username"
+                           name="username"
+                           placeholder="Enter your username"
+                           autocomplete="username"
+                           required>
+
+                </div>
+
+                <div class="field">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="password-box">
+
+                        <input type="password"
+                               id="password"
+                               name="password"
+                               placeholder="Enter your password"
+                               autocomplete="current-password"
+                               required>
+
+                        <button type="button"
+                                class="show-password"
+                                id="togglePassword"
+                                aria-label="Show password"
+                                aria-pressed="false">
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <button type="submit" class="login-btn">
+                    Sign In →
+                </button>
+
+            </form>
+
+            <div class="bottom-link">
+                Are you a customer?
+                <a href="/customer/login">
+                    Customer Login
+                </a>
+            </div>
+
+            <div class="security">
+                🔒 GreenMart Admin Workspace
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    const toggleButton =
+        document.getElementById("togglePassword");
+
+    const passwordInput =
+        document.getElementById("password");
+
+    toggleButton.addEventListener("click", function () {
+
+        const isHidden =
+            passwordInput.type === "password";
+
+        passwordInput.type =
+            isHidden ? "text" : "password";
+
+        toggleButton.textContent =
+            isHidden ? "Hide" : "Show";
+
+        toggleButton.setAttribute(
+            "aria-label",
+            isHidden ? "Hide password" : "Show password"
+        );
+
+        toggleButton.setAttribute(
+            "aria-pressed",
+            String(isHidden)
+        );
+    });
+</script>
+
+</body>
+</html>

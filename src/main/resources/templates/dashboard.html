@@ -80,10 +80,40 @@
 
 <body>
 
+
 <div class="navbar">
+
     <h2>🛒 GreenMart Admin</h2>
-    <a href="/">Home</a>
+
+    <div style="display:flex;
+                align-items:center;
+                gap:20px;">
+
+        <a href="/">Home</a>
+
+        <form th:action="@{/logout}"
+              method="post"
+              style="margin:0;">
+
+            <button type="submit"
+                    style="background:#ffffff;
+                           color:#198754;
+                           border:none;
+                           padding:10px 20px;
+                           border-radius:7px;
+                           font-weight:bold;
+                           cursor:pointer;">
+
+                Logout
+
+            </button>
+
+        </form>
+
+    </div>
+
 </div>
+
 
 <div class="container">
 

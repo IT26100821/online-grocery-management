@@ -1,0 +1,398 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>GreenMart | Customer Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f3f8f4;
+            color: #173b2b;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        .navbar {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 800;
+            color: #198754;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .nav-actions a {
+            text-decoration: none;
+            color: #345848;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: #e8f5ec;
+            color: #198754;
+            border: none;
+            border-radius: 9px;
+            padding: 11px 20px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: #d5eddd;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 40px 25px;
+        }
+
+        .welcome {
+            color: #198754;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero {
+            background: linear-gradient(
+                    120deg, #103b2b, #198754
+            );
+            border-radius: 22px;
+            padding: 55px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero-tag {
+            color: #b5f0c7;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .hero h1 {
+            font-size: 43px;
+            line-height: 1.2;
+            margin: 20px 0;
+        }
+
+        .hero p {
+            color: #d1e9d9;
+            line-height: 1.8;
+        }
+
+        .hero-art {
+            font-size: 90px;
+            white-space: nowrap;
+        }
+
+        .section-heading {
+            margin-top: 45px;
+            margin-bottom: 24px;
+        }
+
+        .section-heading h2 {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .section-heading p {
+            color: #718879;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 30px 24px;
+            box-shadow: 0 6px 20px
+            rgba(20,60,30,0.06);
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card-icon {
+            width: 62px;
+            height: 62px;
+            display: grid;
+            place-items: center;
+            border-radius: 16px;
+            background: #e8f5ec;
+            font-size: 28px;
+        }
+
+        .card h3 {
+            color: #173b2b;
+            margin-top: 25px;
+        }
+
+        .card p {
+            color: #718879;
+            line-height: 1.6;
+            font-size: 14px;
+            min-height: 65px;
+        }
+
+        .status {
+            display: inline-block;
+            background: #eff5f0;
+            color: #5d7b68;
+            padding: 10px 15px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .notice {
+            background: #e6f5eb;
+            padding: 22px;
+            border-radius: 15px;
+            margin-top: 40px;
+            color: #276246;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 35px;
+            color: #889b8e;
+            font-size: 13px;
+        }
+
+        @media (max-width: 1000px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+
+            .container {
+                padding: 25px 16px;
+            }
+
+            .hero {
+                padding: 30px;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .hero-art {
+                display: none;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+<nav class="navbar">
+
+    <div class="brand">
+        🛒 GreenMart
+    </div>
+
+    <div class="nav-actions">
+
+        <a href="/">Home</a>
+
+        <form th:action="@{/logout}"
+              method="post"
+              style="margin:0;">
+
+            <button type="submit"
+                    class="logout-btn">
+                Logout
+            </button>
+
+        </form>
+
+    </div>
+
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+    <div class="welcome"
+         th:text="${'Welcome back, ' + username + '!'}">
+        Welcome back!
+    </div>
+
+    <!-- HERO BANNER -->
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="hero-tag">
+                YOUR GREENMART EXPERIENCE
+            </div>
+
+            <h1>
+                Fresh groceries.<br>
+                Happy living. 🌿
+            </h1>
+
+            <p>
+                Welcome to your personal GreenMart
+                dashboard. Discover products,
+                manage orders, and track your
+                grocery shopping in one place.
+            </p>
+
+        </div>
+
+        <div class="hero-art">
+            🥦🍎
+        </div>
+
+    </section>
+
+    <!-- DASHBOARD FEATURES -->
+    <div class="section-heading">
+
+        <h2>Your Shopping Dashboard</h2>
+
+        <p>
+            Your grocery shopping features
+            in one convenient place.
+        </p>
+
+    </div>
+
+    <div class="cards">
+
+        <!-- PRODUCTS -->
+        <div class="card">
+
+            <div class="card-icon">🥦</div>
+
+            <h3>Browse Products</h3>
+
+            <p>
+                Explore fresh vegetables,
+                fruits and grocery products.
+            </p>
+
+            <span class="status">
+                Coming Soon
+            </span>
+
+        </div>
+
+        <!-- ORDERS -->
+        <div class="card">
+
+            <div class="card-icon">📦</div>
+
+            <h3>My Orders</h3>
+
+            <p>
+                View and manage your personal
+                grocery orders.
+            </p>
+
+            <span class="status">
+                Coming Soon
+            </span>
+
+        </div>
+
+        <!-- PAYMENTS -->
+        <div class="card">
+
+            <div class="card-icon">💳</div>
+
+            <h3>My Payments</h3>
+
+            <p>
+                Check payment records
+                related to your orders.
+            </p>
+
+            <span class="status">
+                Coming Soon
+            </span>
+
+        </div>
+
+        <!-- DELIVERIES -->
+        <div class="card">
+
+            <div class="card-icon">🚚</div>
+
+            <h3>My Deliveries</h3>
+
+            <p>
+                Track your grocery
+                delivery status.
+            </p>
+
+            <span class="status">
+                Coming Soon
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="notice">
+        🌱 Your GreenMart customer account is ready.
+        Shopping features will be connected next.
+    </div>
+
+</div>
+
+<footer class="footer">
+    © GreenMart — Fresh groceries. Happy living.
+</footer>
+
+</body>
+</html>

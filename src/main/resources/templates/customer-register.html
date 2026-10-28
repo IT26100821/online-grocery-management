@@ -1,0 +1,474 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GreenMart | Create Account</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #edf4ee;
+            color: #18382a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        .register-container {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            width: 100%;
+            max-width: 1100px;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 65px
+            rgba(20,70,40,0.12);
+        }
+
+        /* LEFT PANEL */
+
+        .left-panel {
+            background: linear-gradient(
+                    145deg, #103b2b, #198754
+            );
+            color: white;
+            padding: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .brand-icon {
+            background: white;
+            border-radius: 14px;
+            padding: 12px;
+            font-size: 25px;
+        }
+
+        .brand span {
+            color: #a7ecae;
+        }
+
+        .hero h1 {
+            font-size: 43px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #a7ecae;
+        }
+
+        .hero p {
+            color: #d5eadb;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .food-icons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .food-item {
+            width: 65px;
+            height: 65px;
+            background: rgba(255,255,255,0.14);
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+        }
+
+        .footer {
+            color: #c6e4ce;
+            font-size: 13px;
+        }
+
+        /* RIGHT PANEL */
+
+        .right-panel {
+            padding: 45px;
+        }
+
+        .form-box {
+            max-width: 480px;
+            margin: auto;
+        }
+
+        .tag {
+            color: #198754;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin: 12px 0;
+        }
+
+        .subtitle {
+            color: #7a8c81;
+            font-size: 14px;
+            margin-bottom: 26px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #dbe6dd;
+            border-radius: 10px;
+            background: #fbfdfb;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #198754;
+            box-shadow: 0 0 0 3px
+            rgba(25,135,84,0.1);
+        }
+
+        .hint {
+            color: #7a8c81;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .register-btn {
+            width: 100%;
+            background: #198754;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 11px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .register-btn:hover {
+            background: #146c43;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 22px;
+            color: #7a8c81;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #198754;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 9px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .error {
+            background: #fff0ef;
+            color: #b42318;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 800px) {
+            .register-container {
+                grid-template-columns: 1fr;
+            }
+
+            .left-panel {
+                padding: 25px;
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 25px;
+            }
+
+            .hero p,
+            .food-icons,
+            .footer {
+                display: none;
+            }
+
+            .right-panel {
+                padding: 30px 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="register-container">
+
+    <!-- LEFT SIDE -->
+    <section class="left-panel">
+
+        <div class="brand">
+            <div class="brand-icon">🛒</div>
+            <div>Green<span>Mart</span></div>
+        </div>
+
+        <div class="hero">
+
+            <h1>
+                Join the<br>
+                <span>Fresh Revolution.</span>
+            </h1>
+
+            <p>
+                Create your GreenMart account
+                and enjoy fresh groceries,
+                easy ordering, and convenient
+                delivery.
+            </p>
+
+            <div class="food-icons">
+                <div class="food-item">🥦</div>
+                <div class="food-item">🍎</div>
+                <div class="food-item">🥕</div>
+                <div class="food-item">🥑</div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            Fresh groceries. Happy living. 🌿
+        </div>
+
+    </section>
+
+    <!-- RIGHT SIDE -->
+    <main class="right-panel">
+
+        <div class="form-box">
+
+            <div class="tag">
+                JOIN GREENMART
+            </div>
+
+            <h2>Create Account</h2>
+
+            <p class="subtitle">
+                Fill in your details to
+                create a customer account.
+            </p>
+
+            <!-- Backend Error -->
+            <div class="message error"
+                 th:if="${error}"
+                 style="display:none"
+                 th:style="'display:block'"
+                 th:text="${error}">
+            </div>
+
+            <!-- Registration Form -->
+            <form th:action="@{/customer/register}"
+                  method="post"
+                  id="registrationForm">
+
+                <div class="field">
+                    <label for="fullName">
+                        Full Name
+                    </label>
+
+                    <input type="text"
+                           id="fullName"
+                           name="fullName"
+                           placeholder="Enter your full name"
+                           maxlength="100"
+                           autocomplete="name"
+                           required>
+                </div>
+
+                <div class="form-row">
+
+                    <div class="field">
+                        <label for="username">
+                            Username
+                        </label>
+
+                        <input type="text"
+                               id="username"
+                               name="username"
+                               placeholder="Username"
+                               minlength="3"
+                               maxlength="40"
+                               autocomplete="username"
+                               required>
+                    </div>
+
+                    <div class="field">
+                        <label for="phone">
+                            Phone Number
+                        </label>
+
+                        <input type="tel"
+                               id="phone"
+                               name="phone"
+                               placeholder="Phone number"
+                               maxlength="20"
+                               autocomplete="tel"
+                               required>
+                    </div>
+
+                </div>
+
+                <div class="field">
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           placeholder="Enter email address"
+                           maxlength="150"
+                           autocomplete="email"
+                           required>
+                </div>
+
+                <div class="form-row">
+
+                    <div class="field">
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <input type="password"
+                               id="password"
+                               name="password"
+                               placeholder="Password"
+                               minlength="8"
+                               autocomplete="new-password"
+                               required>
+
+                        <div class="hint">
+                            At least 8 characters
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="confirmPassword">
+                            Confirm Password
+                        </label>
+
+                        <input type="password"
+                               id="confirmPassword"
+                               name="confirmPassword"
+                               placeholder="Confirm password"
+                               minlength="8"
+                               autocomplete="new-password"
+                               required>
+                    </div>
+
+                </div>
+
+                <button type="submit"
+                        class="register-btn">
+                    Create My Account →
+                </button>
+
+            </form>
+
+            <div class="login-link">
+                Already have an account?
+                <a href="/customer/login">
+                    Sign In
+                </a>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    const form =
+        document.getElementById("registrationForm");
+
+    const password =
+        document.getElementById("password");
+
+    const confirmPassword =
+        document.getElementById("confirmPassword");
+
+    form.addEventListener("submit", function(event) {
+
+        if (password.value !== confirmPassword.value) {
+
+            event.preventDefault();
+
+            confirmPassword.setCustomValidity(
+                "Passwords do not match"
+            );
+
+            confirmPassword.reportValidity();
+        }
+    });
+
+    confirmPassword.addEventListener("input", function() {
+        confirmPassword.setCustomValidity("");
+    });
+</script>
+
+</body>
+</html>
