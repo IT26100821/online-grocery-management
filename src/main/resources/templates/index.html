@@ -1,168 +1,2181 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>GreenMart - Online Grocery Store</title>
+    <title>GreenMart | Fresh Grocery Shopping</title>
 
     <style>
+
+        :root {
+            --dark: #123d2d;
+            --green: #198754;
+            --light-green: #e7f3e8;
+            --cream: #f8f9f1;
+            --text: #233d2e;
+            --muted: #738478;
+        }
+
         * {
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f8f4;
+            background: white;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: var(--text);
         }
 
-        .navbar {
-            background: #198754;
-            color: white;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .navbar a {
-            color: white;
+        a {
+            color: inherit;
             text-decoration: none;
-            margin: 10px;
         }
 
-        .hero {
-            text-align: center;
-            padding: 80px 20px;
-            background: #d1e7dd;
-        }
-
-        .hero h1 {
-            color: #146c43;
-            font-size: 40px;
-        }
-
-        .btn {
-            background: #198754;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
+        button {
+            font: inherit;
             cursor: pointer;
         }
 
-        .products {
-            padding: 40px 20px;
+        /* ===============================
+           TOP ANNOUNCEMENT BAR
+        =============================== */
+
+        .top-bar {
+            background: var(--dark);
+            color: #d8f3dc;
+            padding: 10px;
             text-align: center;
+            font-size: 12px;
+            letter-spacing: 0.5px;
         }
 
-        .product-container {
+        /* ===============================
+           NAVIGATION BAR
+        =============================== */
+
+        .navbar {
+            background: white;
+            padding: 18px 6%;
             display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
             gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: 800;
+            color: var(--dark);
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: var(--green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: var(--green);
+        }
+
+        .nav-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .nav-actions form {
+            margin: 0;
+        }
+
+        .username {
+            color: var(--dark);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .login-link {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .pill-btn {
+            background: var(--green);
+            border: none;
+            color: white;
+            border-radius: 35px;
+            padding: 12px 22px;
+            font-weight: 700;
+            display: inline-block;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .pill-btn:hover {
+            background: #126a40;
+        }
+
+        .logout-btn {
+            background: #e7f3e8;
+            color: var(--dark);
+            border: none;
+            border-radius: 30px;
+            padding: 12px 20px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #d1e9d5;
+        }
+
+
+              /* ===============================
+                 HERO SECTION
+              =============================== */
+
+        .hero {
+            background: var(--cream);
+            min-height: 625px;
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            align-items: center;
+            padding: 75px 7%;
+            gap: 60px;
+            overflow: hidden;
+        }
+
+        .hero-text {
+            max-width: 600px;
+        }
+
+        .eyebrow {
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-family: Georgia, serif;
+            font-size: clamp(45px, 5.1vw, 78px);
+            line-height: 1.08;
+            letter-spacing: -2px;
+            color: var(--dark);
+            margin: 24px 0;
+        }
+
+        .hero h1 span {
+            color: var(--green);
+        }
+
+        .hero-description {
+            color: var(--muted);
+            line-height: 1.9;
+            font-size: 16px;
+            max-width: 430px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 14px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+
+        .outline-btn {
+            border: 1px solid #c7dacd;
+            border-radius: 35px;
+            padding: 12px 22px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .outline-btn:hover {
+            background: white;
+        }
+
+        /* ===============================
+           HERO IMAGE
+        =============================== */
+
+        .hero-visual {
+            position: relative;
+            min-height: 470px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .visual-circle {
+            position: absolute;
+            width: 92%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: #e0edde;
+            top: 5%;
+            right: 0;
+        }
+
+        .main-photo {
+            position: relative;
+            width: 88%;
+            height: 410px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 200px 200px 26px 26px;
+            box-shadow: 0 20px 45px
+            rgba(19,61,41,0.13);
+            z-index: 1;
+        }
+
+        .leaf-decoration {
+            position: absolute;
+            top: 12px;
+            right: 3px;
+            font-size: 65px;
+            transform: rotate(-25deg);
+            z-index: 2;
+        }
+
+        .fruit-decoration {
+            position: absolute;
+            bottom: 10px;
+            right: 2%;
+            font-size: 60px;
+            z-index: 2;
+        }
+
+        .floating-card {
+            position: absolute;
+            z-index: 3;
+            left: -4%;
+            bottom: 38px;
+            background: white;
+            padding: 19px 23px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px
+            rgba(0,0,0,0.1);
+        }
+
+        .floating-card strong {
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .floating-card p {
+            font-size: 12px;
+            margin: 7px 0 0;
+            color: var(--muted);
+        }
+
+        /* ===============================
+           BENEFITS SECTION
+        =============================== */
+
+        .benefits {
+            max-width: 1200px;
+            margin: auto;
+            padding: 55px 25px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .benefit {
+            display: flex;
+            align-items: center;
+            gap: 17px;
+        }
+
+        .benefit-icon {
+            width: 62px;
+            height: 62px;
+            flex-shrink: 0;
+            background: var(--light-green);
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+            font-size: 28px;
+        }
+
+        .benefit h3 {
+            margin: 0 0 7px;
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .benefit p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* ===============================
+           PRODUCT SECTION
+        =============================== */
+
+        .products {
+            background: #f7faf7;
+            padding: 80px 7%;
+        }
+
+        .section-head {
+            max-width: 1200px;
+            margin: 0 auto 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 20px;
+        }
+
+        .section-head h2 {
+            font-family: Georgia, serif;
+            font-size: 42px;
+            color: var(--dark);
+            margin: 12px 0;
+        }
+
+        .section-head p {
+            color: var(--muted);
+        }
+
+        .filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter {
+            border: 1px solid #d7e6d9;
+            background: white;
+            padding: 11px 17px;
+            border-radius: 25px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .filter.active,
+        .filter:hover {
+            background: var(--green);
+            color: white;
+        }
+
+        .product-grid {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 23px;
         }
 
         .product-card {
             background: white;
-            padding: 25px;
-            width: 220px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px #ddd;
+            padding: 15px;
+            border: 1px solid #e9f0e9;
+            border-radius: 19px;
+            transition: 0.2s;
         }
 
-        .product-card h3 {
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px
+            rgba(0,0,0,0.06);
+        }
+
+        .product-picture {
+            height: 190px;
+            display: grid;
+            place-items: center;
+            font-size: 80px;
+            border-radius: 15px;
+        }
+
+        .rice {
+            background: #f7f0e3;
+        }
+
+        .milk {
+            background: #e9f3fc;
+        }
+
+        .coconut {
+            background: #f4ede4;
+        }
+
+        .apple {
+            background: #fcebe8;
+        }
+
+        .product-body {
+            padding: 17px 6px 5px;
+        }
+
+        .category {
+            font-size: 12px;
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .product-body h3 {
+            font-size: 19px;
+            margin: 9px 0;
+        }
+
+        .product-body p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .price {
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .add-btn {
+            background: var(--green);
+            color: white;
+            border: none;
+            padding: 11px 15px;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #126a40;
+        }
+
+        /* ===============================
+           ABOUT SECTION
+        =============================== */
+
+        .about {
+            padding: 85px 7%;
+            text-align: center;
+        }
+
+        .about h2 {
+            font-family: Georgia, serif;
+            font-size: 40px;
+            color: var(--dark);
+        }
+
+        .about p {
+            color: var(--muted);
+            line-height: 1.9;
+            max-width: 650px;
+            margin: 20px auto;
+        }
+
+        /* ===============================
+           FOOTER
+        =============================== */
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 45px 7%;
+            text-align: center;
+        }
+
+        footer h2 {
+            font-size: 26px;
+        }
+
+        footer p {
+            color: #bbd8c3;
+            font-size: 13px;
+        }
+
+        footer a {
+            color: #e3f6e6;
+        }
+
+        /* ===============================
+           DEMO CART MESSAGE
+        =============================== */
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--dark);
+            color: white;
+            padding: 17px 23px;
+            border-radius: 12px;
+            display: none;
+            z-index: 100;
+            max-width: calc(100vw - 48px);
+        }
+
+        /* ===============================
+           RESPONSIVE DESIGN
+        =============================== */
+
+        @media (max-width: 1000px) {
+
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero {
+                gap: 25px;
+            }
+        }
+
+        @media (max-width: 760px) {
+
+            .navbar {
+                padding: 20px;
+            }
+
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 55px 25px;
+            }
+
+            .hero-visual {
+                min-height: 370px;
+            }
+
+            .main-photo {
+                height: 330px;
+            }
+
+            .benefits {
+                grid-template-columns: 1fr;
+            }
+
+            .section-head {
+                flex-direction: column;
+                align-items: start;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 45px;
+            }
+
+            .floating-card {
+                left: 0;
+                bottom: 8px;
+            }
+
+            .navbar {
+                justify-content: center;
+            }
+
+            .nav-actions {
+                justify-content: center;
+            }
+        }
+
+        /* ===============================
+           FIX: LARGE SCREEN HERO IMAGE
+           Prevent photo stretching
+        =============================== */
+
+        @media (min-width: 1100px) {
+
+            .hero {
+                grid-template-columns:
+                    minmax(0, 560px)
+                    minmax(0, 480px);
+                justify-content: space-between;
+                column-gap: clamp(40px, 6vw, 110px);
+            }
+
+            .hero-text {
+                max-width: 560px;
+            }
+
+            .hero-visual {
+                width: 100%;
+                max-width: 480px;
+                min-height: 470px;
+                margin: 0 auto;
+                position: relative;
+            }
+
+            .main-photo {
+                width: 400px;
+                max-width: 88%;
+                height: 420px;
+                object-fit: cover;
+                object-position: center;
+                border-radius: 200px 200px 26px 26px;
+            }
+
+            .visual-circle {
+                width: 440px;
+                max-width: 92%;
+                aspect-ratio: 1;
+                left: 50%;
+                right: auto;
+                top: 5%;
+                transform: translateX(-50%);
+            }
+
+            .floating-card {
+                left: 0;
+                bottom: 38px;
+            }
+
+            .leaf-decoration {
+                right: 0;
+            }
+
+            .fruit-decoration {
+                right: 0;
+            }
+        }
+
+        /* FINAL HERO DESIGN IMPROVEMENT */
+
+        @media (min-width: 1100px) {
+
+            .hero {
+                grid-template-columns:
+            minmax(0, 560px)
+            minmax(0, 480px);
+
+                justify-content: center;
+                align-items: center;
+                column-gap: 100px;
+
+                min-height: 590px;
+                padding: 55px 5%;
+            }
+
+            .hero-text {
+                max-width: 560px;
+            }
+
+            .hero h1 {
+                font-size: clamp(48px, 4.5vw, 72px);
+            }
+
+            .hero-visual {
+                max-width: 480px;
+                margin: 0;
+            }
+
+            .main-photo {
+                width: 400px;
+                max-width: 88%;
+                height: 420px;
+                object-fit: cover;
+            }
+        }
+
+        /* EXTRA FRESHNESS DETAILS */
+
+        .hero-text::after {
+            content: "✓ Fresh Selection    ✓ Quality Products    ✓ Easy Shopping";
+            display: block;
+            margin-top: 30px;
+            padding-top: 18px;
+            border-top: 1px solid #dce8dc;
+            color: #377450;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 2;
+        }
+
+        @media (max-width: 480px) {
+            .hero-text::after {
+                font-size: 11px;
+            }
+        }
+
+        /* DYNAMIC PRODUCT STYLING */
+
+        .product-picture {
+            background: linear-gradient(135deg, #e5f3e8, #f8faf1);
+            font-size: 65px;
+        }
+
+        .empty-products {
+            max-width: 1200px;
+            margin: 25px auto;
+            padding: 45px;
+            background: white;
+            border-radius: 18px;
+            text-align: center;
+        }
+
+        .empty-products h3 {
             color: #198754;
         }
 
-        footer {
-            text-align: center;
+        .empty-products p {
+            color: #738478;
+        }
+
+        .add-btn:disabled {
+            background: #c5d4c9;
+            color: #5c6c60;
+            cursor: not-allowed;
+        }
+
+
+        /* REAL PRODUCT PHOTO */
+
+        .product-picture {
+            overflow: hidden;
+        }
+
+        .product-photo {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: inherit;
+        }
+
+
+        /* ===============================
+           GREENMART SHOPPING CART
+        ================================ */
+
+        /* NAVBAR CART BUTTON */
+
+        .cart-trigger {
+            background: #e7f3e8;
+            color: #123d2d;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-trigger:hover {
+            background: #d1e9d5;
+        }
+
+        #cartCount {
             background: #198754;
             color: white;
-            padding: 20px;
+            border-radius: 50%;
+            min-width: 24px;
+            height: 24px;
+            display: grid;
+            place-items: center;
+            font-size: 12px;
         }
+
+        /* DARK BACKGROUND */
+
+        .cart-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .cart-backdrop.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        /* SHOPPING CART PANEL */
+
+        .cart-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: min(420px, 100%);
+            height: 100vh;
+            height: 100dvh;
+            background: white;
+            z-index: 1000;
+
+            display: flex;
+            flex-direction: column;
+
+            transform: translateX(100%);
+            visibility: hidden;
+            transition: transform 0.3s ease,
+            visibility 0.3s;
+            box-shadow: -10px 0 35px rgba(0,0,0,0.12);
+        }
+
+        .cart-panel.open {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        /* CART HEADER */
+
+        .cart-header {
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e7eee8;
+        }
+
+        .cart-header h2 {
+            margin: 0;
+            font-size: 21px;
+            color: #123d2d;
+        }
+
+        .cart-close {
+            background: #f1f5f1;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 18px;
+        }
+
+        /* CART PRODUCTS */
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 22px;
+        }
+
+        .cart-empty {
+            text-align: center;
+            color: #738478;
+            margin-top: 60px;
+        }
+
+        /* CART ITEM */
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 18px 0;
+            border-bottom: 1px solid #eef2ee;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-details h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            color: #123d2d;
+        }
+
+        .cart-item-details p {
+            color: #738478;
+            margin: 5px 0;
+            font-size: 13px;
+        }
+
+        /* QUANTITY BUTTONS */
+
+        .cart-quantity {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .cart-quantity button {
+            background: #e7f3e8;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        /* REMOVE BUTTON */
+
+        .cart-remove {
+            background: none;
+            color: #dc3545;
+            border: none;
+            font-size: 12px;
+            margin-top: 12px;
+        }
+
+        /* CART FOOTER */
+
+        .cart-footer {
+            padding: 25px;
+            border-top: 1px solid #e7eee8;
+            background: #f8fbf8;
+        }
+
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #123d2d;
+        }
+
+        .cart-checkout {
+            width: 100%;
+            background: #198754;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-weight: 700;
+        }
+
+        .cart-checkout:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+
+        /* CART ITEM FINAL DESIGN */
+
+        .cart-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .cart-item-image,
+        .cart-item-placeholder {
+            width: 65px;
+            height: 65px;
+            flex-shrink: 0;
+            border-radius: 12px;
+            background: #e7f3e8;
+        }
+
+        .cart-item-image {
+            object-fit: cover;
+        }
+
+        .cart-item-placeholder {
+            display: grid;
+            place-items: center;
+            font-size: 30px;
+        }
+
+        .cart-item-details {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .cart-item-subtotal {
+            font-size: 13px;
+            color: #198754;
+            white-space: nowrap;
+        }
+
+        .cart-quantity button:hover:not(:disabled) {
+            background: #cde8d3;
+        }
+
+        .cart-quantity button:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .cart-remove {
+            cursor: pointer;
+            padding: 0;
+            text-decoration: underline;
+        }
+
+        .cart-remove:hover {
+            color: #a51d2d;
+        }
+
+
+
+
     </style>
 </head>
 
 <body>
 
-<!-- Navigation Bar -->
-<div class="navbar">
+<!-- ===============================
+     TOP ANNOUNCEMENT BAR
+================================ -->
 
-    <h2>🛒 GreenMart</h2>
-
-    <div>
-        <a href="/">Home</a>
-        <a href="#products">Products</a>
-        <a href="#about">About</a>
-    </div>
-
+<div class="top-bar">
+    🌿 Fresh groceries for happier everyday living
 </div>
 
-<!-- Home Section -->
+<!-- ===============================
+     NAVIGATION BAR
+================================ -->
+
+<header class="navbar" id="home">
+
+    <a th:href="@{/}" class="logo">
+        🛒 Green<span>Mart</span>
+    </a>
+
+    <nav class="nav-links">
+
+        <a href="#home">Home</a>
+
+        <a href="#products">Fresh Picks</a>
+
+        <a href="#about">About Us</a>
+
+    </nav>
+
+
+    <!-- SHOPPING CART BUTTON -->
+    <button type="button"
+            class="cart-trigger"
+            onclick="openCart()"
+            aria-label="Open shopping cart">
+
+        🛒 My Cart
+
+        <span id="cartCount">0</span>
+
+    </button>
+
+
+    <!-- NOT LOGGED IN -->
+
+    <div class="nav-actions"
+         th:unless="${gmLoggedIn}">
+
+        <a th:href="@{/customer/login}"
+           class="login-link">
+            Log In
+        </a>
+
+        <a th:href="@{/customer/register}"
+           class="pill-btn">
+            Sign Up ↗
+        </a>
+
+    </div>
+
+    <!-- LOGGED IN -->
+
+    <div class="nav-actions"
+         th:if="${gmLoggedIn}">
+
+        <span class="username">
+
+            Hi,
+            <span th:text="${gmUsername}">
+                Customer
+            </span>!
+
+        </span>
+
+        <!-- SUPER ADMIN ONLY -->
+
+        <a th:if="${gmSuperAdmin}"
+           th:href="@{/dashboard}"
+           class="login-link">
+
+            Admin Dashboard
+
+        </a>
+
+        <!-- LOGOUT BUTTON -->
+
+        <form th:action="@{/logout}"
+              method="post">
+
+            <button type="submit"
+                    class="logout-btn">
+
+                Logout
+
+            </button>
+
+        </form>
+
+    </div>
+
+</header>
+
+
+<!-- SHOPPING CART BACKDROP -->
+<div id="cartBackdrop"
+     class="cart-backdrop"
+     onclick="closeCart()">
+</div>
+
+<!-- SHOPPING CART SIDE PANEL -->
+<aside id="cartPanel"
+       class="cart-panel"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="cartTitle"
+       aria-hidden="true">
+
+    <!-- CART HEADER -->
+    <div class="cart-header">
+
+        <h2 id="cartTitle">
+            🛒 My Shopping Cart
+        </h2>
+
+        <button type="button"
+                class="cart-close"
+                onclick="closeCart()"
+                aria-label="Close cart">
+            ✕
+        </button>
+
+    </div>
+
+    <!-- CART PRODUCTS -->
+    <div id="cartItems"
+         class="cart-items">
+
+        <p class="cart-empty">
+            Your cart is empty.
+        </p>
+
+    </div>
+
+    <!-- CART FOOTER -->
+    <div class="cart-footer">
+
+        <div class="cart-total-row">
+
+            <strong>Subtotal</strong>
+
+            <strong id="cartTotal">
+                Rs. 0.00
+            </strong>
+
+        </div>
+
+
+            <button type="button"
+                    id="cartCheckout"
+                    class="cart-checkout"
+                    th:attr="data-checkout-url=@{/checkout}"
+                    onclick="window.location.href=this.dataset.checkoutUrl"
+                    disabled>
+                Proceed to Checkout →
+            </button>
+
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- ===============================
+     HERO SECTION
+================================ -->
+
 <section class="hero">
 
-    <h1>Welcome to GreenMart!</h1>
+    <div class="hero-text">
 
-    <p>Fresh Groceries Delivered to Your Doorstep</p>
+        <div class="eyebrow">
+            🌱 NATURE'S FRESHNESS, EVERY DAY
+        </div>
 
-    <a href="#products">
-        <button class="btn">Shop Now</button>
+        <h1>
+            Good food.<br>
+            Fresh days.<br>
+            <span>Happy living.</span>
+        </h1>
+
+        <p class="hero-description">
+
+            Discover fresh fruits, vegetables,
+            dairy products and everyday essentials.
+
+            A little more freshness for every kitchen,
+            brought together at GreenMart.
+
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#products"
+               class="pill-btn">
+
+                Explore Fresh Picks ↗
+
+            </a>
+
+            <a href="#about"
+               class="outline-btn">
+
+                Our Story
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- FRESH GROCERY IMAGE -->
+
+    <div class="hero-visual">
+
+        <div class="visual-circle"></div>
+
+
+        <img
+                class="main-photo"
+                th:src="@{/images/grocery-hero.jpg}"
+                alt="Fresh fruits and vegetables">
+
+
+        <span class="leaf-decoration"
+              aria-hidden="true">
+
+            🌿
+
+        </span>
+
+        <span class="fruit-decoration"
+              aria-hidden="true">
+
+            🍅
+
+        </span>
+
+        <div class="floating-card">
+
+            <strong>
+                🥬 Freshness in every pick
+            </strong>
+
+            <p>
+                Explore your grocery essentials
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ===============================
+     BENEFITS
+================================ -->
+
+<section class="benefits">
+
+    <div class="benefit">
+
+        <div class="benefit-icon">
+            🥦
+        </div>
+
+        <div>
+            <h3>Fresh Selection</h3>
+
+            <p>
+                Everyday grocery essentials
+            </p>
+        </div>
+
+    </div>
+
+    <div class="benefit">
+
+        <div class="benefit-icon">
+            🚚
+        </div>
+
+        <div>
+            <h3>Convenient Shopping</h3>
+
+            <p>
+                Simple ordering experience
+            </p>
+        </div>
+
+    </div>
+
+    <div class="benefit">
+
+        <div class="benefit-icon">
+            💚
+        </div>
+
+        <div>
+            <h3>Made for Your Kitchen</h3>
+
+            <p>
+                Fresh ideas for everyday meals
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ===============================
+     PRODUCT SECTION
+================================ -->
+
+
+<!-- PRODUCT SECTION -->
+<section class="products" id="products">
+
+    <div class="section-head">
+
+        <div>
+            <div class="eyebrow">
+                EXPLORE GREENMART
+            </div>
+
+            <h2>Our Fresh Picks</h2>
+
+            <p>
+                Fresh grocery products available at GreenMart.
+            </p>
+        </div>
+
+        <!-- CATEGORY FILTERS -->
+        <div class="filters" id="categoryFilters">
+
+            <button type="button"
+                    class="filter active"
+                    onclick="filterProducts('all', this)">
+                All
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- NO PRODUCTS MESSAGE -->
+    <div class="empty-products"
+         th:if="${#lists.isEmpty(shopProducts)}">
+
+        <h3>🛒 Products Coming Soon!</h3>
+
+        <p>
+            Our fresh grocery collection
+            will appear here soon.
+        </p>
+
+    </div>
+
+    <!-- ACTUAL ADMIN PRODUCTS -->
+    <div class="product-grid">
+
+        <div class="product-card"
+             th:each="product : ${shopProducts}"
+             th:attr="data-category=${#strings.toLowerCase(product.category)},
+                      data-name=${product.name}">
+
+
+            <!-- PRODUCT PHOTO -->
+            <div class="product-picture">
+
+                <!-- Show uploaded product photo -->
+                <img th:if="${product.imageFileName != null
+                 and !#strings.isEmpty(product.imageFileName)}"
+
+                     th:src="@{/product-images/{fileName}
+                 (fileName=${product.imageFileName})}"
+
+                     th:alt="${product.name}"
+
+                     class="product-photo">
+
+                <!-- Show icon when no photo exists -->
+                <span th:unless="${product.imageFileName != null
+                      and !#strings.isEmpty(product.imageFileName)}">
+        🛍️
+    </span>
+
+            </div>
+
+
+            <div class="product-body">
+
+                <!-- CATEGORY -->
+                <span class="category"
+                      th:text="${product.category}">
+                    Grocery
+                </span>
+
+                <!-- PRODUCT NAME -->
+                <h3 th:text="${product.name}">
+                    Product Name
+                </h3>
+
+                <!-- STOCK -->
+                <p th:if="${product.quantity > 0}"
+                   th:text="|${product.quantity} available|">
+                    In Stock
+                </p>
+
+                <p th:if="${product.quantity <= 0}"
+                   style="color:#c0392b;">
+                    Out of Stock
+                </p>
+
+                <div class="price-row">
+
+                    <!-- PRICE -->
+                    <span class="price"
+                          th:text="|Rs. ${#numbers.formatDecimal(product.price, 1, 2)}|">
+                        Rs. 0.00
+                    </span>
+
+                    <!-- ADD TO SHOPPING CART -->
+                    <button type="button"
+                            class="add-btn"
+                            th:disabled="${product.quantity <= 0}"
+                            th:attr="data-product-id=${product.id},
+                 data-product-name=${product.name},
+                 data-product-price=${product.price},
+                 data-product-stock=${product.quantity}"
+                            onclick="addToCart(this)">
+
+    <span th:if="${product.quantity > 0}">
+        + Add
+    </span>
+
+                        <span th:if="${product.quantity <= 0}">
+        Sold Out
+    </span>
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ===============================
+     ABOUT SECTION
+================================ -->
+
+<section class="about" id="about">
+
+    <div class="eyebrow">
+        THE GREENMART EXPERIENCE
+    </div>
+
+    <h2>
+        A fresh approach to grocery shopping.
+    </h2>
+
+    <p>
+
+        GreenMart brings together groceries,
+        ordering, payments and delivery management
+        in one convenient platform.
+
+        Our goal is to make everyday shopping
+        simpler and more enjoyable.
+
+    </p>
+
+    <a href="#products"
+       class="pill-btn">
+
+        Explore Our Products ↗
+
     </a>
 
 </section>
 
-<!-- Products Section -->
-<section class="products" id="products">
+<!-- ===============================
+     FOOTER
+================================ -->
 
-    <h2>Our Grocery Products</h2>
-
-    <div class="product-container">
-
-        <div class="product-card">
-            <h1>🍚</h1>
-            <h3>Rice 1kg</h3>
-            <p>Rs. 250.00</p>
-            <button class="btn">Add to Cart</button>
-        </div>
-
-        <div class="product-card">
-            <h1>🥛</h1>
-            <h3>Fresh Milk</h3>
-            <p>Rs. 450.00</p>
-            <button class="btn">Add to Cart</button>
-        </div>
-
-        <div class="product-card">
-            <h1>🥥</h1>
-            <h3>Coconut</h3>
-            <p>Rs. 150.00</p>
-            <button class="btn">Add to Cart</button>
-        </div>
-
-        <div class="product-card">
-            <h1>🍎</h1>
-            <h3>Apple</h3>
-            <p>Rs. 300.00</p>
-            <button class="btn">Add to Cart</button>
-        </div>
-
-    </div>
-
-</section>
-
-<section class="products" id="about">
-    <h2>About GreenMart</h2>
-    <p>Your trusted online grocery shopping destination.</p>
-</section>
-
-<!-- Footer -->
 <footer>
-    <p>© 2026 GreenMart. All Rights Reserved.</p>
+
+    <h2>
+        🌿 GreenMart
+    </h2>
+
+    <p>
+        Fresh Groceries. Happy Living.
+    </p>
+
+    <p>
+
+        <a href="#home">Home</a> ·
+
+        <a href="#products">Products</a> ·
+
+        <a href="#about">About</a> ·
+
+        <a th:href="@{/admin/login}">
+            Admin Portal
+        </a>
+
+    </p>
+
+    <p>
+        © 2026 GreenMart
+    </p>
+
 </footer>
+
+<!-- ===============================
+     DEMO CART MESSAGE
+================================ -->
+
+<div class="toast"
+     id="cartToast"
+     role="status"
+     aria-live="polite">
+</div>
+
+<!-- ===============================
+     JAVASCRIPT
+================================ -->
+
+
+<script>
+    // =====================================
+    // GREENMART CATEGORY FILTERING
+    // =====================================
+
+    function filterProducts(category, button) {
+
+        document.querySelectorAll(".product-card")
+            .forEach(card => {
+
+                const match =
+                    category === "all" ||
+                    card.dataset.category === category;
+
+                card.style.display = match ? "block" : "none";
+            });
+
+        document.querySelectorAll(".filter")
+            .forEach(btn => btn.classList.remove("active"));
+
+        button.classList.add("active");
+    }
+
+
+    // =====================================
+    // GREENMART SHOPPING CART
+    // =====================================
+
+    // Keep carts separate for different usernames
+    const usernameElement =
+        document.querySelector(".username span");
+
+    const cartOwner = usernameElement
+        ? usernameElement.textContent.trim()
+        : "guest";
+
+    const CART_KEY = "greenMartCart:" + cartOwner;
+
+    let shoppingCart = [];
+
+    try {
+        const savedCart = JSON.parse(
+            sessionStorage.getItem(CART_KEY) || "[]"
+        );
+
+        shoppingCart = Array.isArray(savedCart)
+            ? savedCart
+            : [];
+
+    } catch (error) {
+        shoppingCart = [];
+    }
+
+
+    // FORMAT PRICE
+    function formatPrice(amount) {
+        return "Rs. " + Number(amount).toFixed(2);
+    }
+
+
+    // READ PRODUCT DETAILS FROM BUTTON
+    function getProductData(button) {
+
+        const card = button.closest(".product-card");
+
+        const productImage = card
+            ? card.querySelector(".product-photo")
+            : null;
+
+        return {
+            id: button.dataset.productId,
+            name: button.dataset.productName,
+            price: Number(button.dataset.productPrice),
+            stock: Number(button.dataset.productStock),
+            image: productImage
+                ? productImage.getAttribute("src")
+                : ""
+        };
+    }
+
+
+    // SAVE CART
+    function saveCart() {
+
+        sessionStorage.setItem(
+            CART_KEY,
+            JSON.stringify(shoppingCart)
+        );
+    }
+
+
+    // =====================================
+    // ADD PRODUCT TO CART
+    // =====================================
+
+    function addToCart(button) {
+
+        const product = getProductData(button);
+
+        if (!product.id ||
+            !Number.isFinite(product.price) ||
+            product.price <= 0 ||
+            !Number.isInteger(product.stock) ||
+            product.stock <= 0) {
+
+            showCartMessage("This product is unavailable.");
+            return;
+        }
+
+        const existingItem = shoppingCart.find(
+            item => item.id === product.id
+        );
+
+        if (existingItem) {
+
+            if (existingItem.quantity >= product.stock) {
+
+                showCartMessage(
+                    "Only " + product.stock +
+                    " units of " + product.name + " available."
+                );
+
+                return;
+            }
+
+            existingItem.quantity++;
+
+        } else {
+
+            shoppingCart.push({
+                ...product,
+                quantity: 1
+            });
+        }
+
+        saveCart();
+        renderCart();
+
+        showCartMessage(
+            product.name + " added to cart!"
+        );
+    }
+
+
+    // =====================================
+    // INCREASE / DECREASE QUANTITY
+    // =====================================
+
+    function changeCartQuantity(productId, change) {
+
+        const item = shoppingCart.find(
+            product => product.id === productId
+        );
+
+        if (!item) {
+            return;
+        }
+
+        const newQuantity = item.quantity + change;
+
+        if (newQuantity <= 0) {
+
+            removeFromCart(productId);
+            return;
+        }
+
+        if (newQuantity > item.stock) {
+
+            showCartMessage(
+                "Only " + item.stock +
+                " units available."
+            );
+
+            return;
+        }
+
+        item.quantity = newQuantity;
+
+        saveCart();
+        renderCart();
+    }
+
+
+    // =====================================
+    // REMOVE PRODUCT FROM CART
+    // =====================================
+
+    function removeFromCart(productId) {
+
+        shoppingCart = shoppingCart.filter(
+            item => item.id !== productId
+        );
+
+        saveCart();
+        renderCart();
+
+        showCartMessage("Product removed from cart.");
+    }
+
+
+    // =====================================
+    // DISPLAY CART PRODUCTS
+    // =====================================
+
+    function renderCart() {
+
+        const cartItems =
+            document.getElementById("cartItems");
+
+        const cartCount =
+            document.getElementById("cartCount");
+
+        const cartTotal =
+            document.getElementById("cartTotal");
+
+        if (!cartItems || !cartCount || !cartTotal) {
+            return;
+        }
+
+        cartItems.replaceChildren();
+
+        const totalQuantity = shoppingCart.reduce(
+            (total, item) => total + item.quantity,
+            0
+        );
+
+        const totalPrice = shoppingCart.reduce(
+            (total, item) =>
+                total + item.price * item.quantity,
+            0
+        );
+
+        // UPDATE NAVBAR COUNT
+        cartCount.textContent = totalQuantity;
+
+        // UPDATE TOTAL PRICE
+        cartTotal.textContent = formatPrice(totalPrice);
+
+        // Enable Checkout when cart has products
+        const checkoutButton =
+            document.getElementById("cartCheckout");
+
+        if (checkoutButton) {
+            checkoutButton.disabled = shoppingCart.length === 0;
+        }
+
+        // EMPTY CART
+        if (shoppingCart.length === 0) {
+
+            const emptyMessage =
+                document.createElement("p");
+
+            emptyMessage.className = "cart-empty";
+            emptyMessage.textContent =
+                "Your shopping cart is empty. 🛒";
+
+            cartItems.appendChild(emptyMessage);
+            return;
+        }
+
+        // DISPLAY EACH PRODUCT
+        shoppingCart.forEach(item => {
+
+            const row = document.createElement("div");
+            row.className = "cart-item";
+
+            // PRODUCT IMAGE
+            let imageElement;
+            let validImage = false;
+
+            if (item.image) {
+                try {
+                    const imageUrl = new URL(
+                        item.image,
+                        window.location.href
+                    );
+
+                    validImage =
+                        imageUrl.origin === window.location.origin &&
+                        /\/product-images\/[0-9a-f-]{36}\.(jpg|png)$/i
+                            .test(imageUrl.pathname);
+
+                } catch (error) {
+                    validImage = false;
+                }
+            }
+
+            if (validImage) {
+
+                imageElement = document.createElement("img");
+                imageElement.src = item.image;
+                imageElement.alt = item.name;
+                imageElement.className = "cart-item-image";
+
+            } else {
+
+                imageElement = document.createElement("div");
+                imageElement.className = "cart-item-placeholder";
+                imageElement.textContent = "🛍️";
+            }
+
+            // PRODUCT DETAILS
+            const details = document.createElement("div");
+            details.className = "cart-item-details";
+
+            const productName = document.createElement("h3");
+            productName.textContent = item.name;
+
+            const unitPrice = document.createElement("p");
+            unitPrice.textContent =
+                formatPrice(item.price) + " each";
+
+            // QUANTITY CONTROLS
+            const quantityBox = document.createElement("div");
+            quantityBox.className = "cart-quantity";
+
+            // MINUS BUTTON
+            const minusButton = document.createElement("button");
+            minusButton.type = "button";
+            minusButton.textContent = "−";
+            minusButton.setAttribute(
+                "aria-label",
+                "Decrease " + item.name + " quantity"
+            );
+
+            minusButton.addEventListener("click", () => {
+                changeCartQuantity(item.id, -1);
+            });
+
+            // QUANTITY NUMBER
+            const quantityText = document.createElement("span");
+            quantityText.textContent = item.quantity;
+
+            // PLUS BUTTON
+            const plusButton = document.createElement("button");
+            plusButton.type = "button";
+            plusButton.textContent = "+";
+            plusButton.disabled = item.quantity >= item.stock;
+            plusButton.setAttribute(
+                "aria-label",
+                "Increase " + item.name + " quantity"
+            );
+
+            plusButton.addEventListener("click", () => {
+                changeCartQuantity(item.id, 1);
+            });
+
+            quantityBox.append(
+                minusButton,
+                quantityText,
+                plusButton
+            );
+
+            // REMOVE BUTTON
+            const removeButton = document.createElement("button");
+            removeButton.type = "button";
+            removeButton.className = "cart-remove";
+            removeButton.textContent = "Remove";
+
+            removeButton.addEventListener("click", () => {
+                removeFromCart(item.id);
+            });
+
+            // PRICE FOR THIS PRODUCT
+            const itemTotal = document.createElement("strong");
+            itemTotal.className = "cart-item-subtotal";
+            itemTotal.textContent = formatPrice(
+                item.price * item.quantity
+            );
+
+            details.append(
+                productName,
+                unitPrice,
+                quantityBox,
+                removeButton
+            );
+
+            row.append(
+                imageElement,
+                details,
+                itemTotal
+            );
+
+            cartItems.appendChild(row);
+        });
+    }
+
+
+    // =====================================
+    // CART NOTIFICATION
+    // =====================================
+
+    function showCartMessage(message) {
+
+        const toast =
+            document.getElementById("cartToast");
+
+        if (!toast) {
+            return;
+        }
+
+        toast.textContent = message;
+        toast.style.display = "block";
+
+        clearTimeout(window.greenMartToastTimer);
+
+        window.greenMartToastTimer = setTimeout(() => {
+            toast.style.display = "none";
+        }, 3000);
+    }
+
+
+    // =====================================
+    // OPEN CART PANEL
+    // =====================================
+
+    function openCart() {
+
+        const panel =
+            document.getElementById("cartPanel");
+
+        const backdrop =
+            document.getElementById("cartBackdrop");
+
+        if (!panel || !backdrop) {
+            return;
+        }
+
+        renderCart();
+
+        panel.classList.add("open");
+        backdrop.classList.add("open");
+
+        panel.setAttribute("aria-hidden", "false");
+
+        document.body.style.overflow = "hidden";
+
+        const closeButton = panel.querySelector(".cart-close");
+
+        if (closeButton) {
+            closeButton.focus();
+        }
+    }
+
+
+    // =====================================
+    // CLOSE CART PANEL
+    // =====================================
+
+    function closeCart() {
+
+        const panel =
+            document.getElementById("cartPanel");
+
+        const backdrop =
+            document.getElementById("cartBackdrop");
+
+        if (!panel || !backdrop) {
+            return;
+        }
+
+        panel.classList.remove("open");
+        backdrop.classList.remove("open");
+
+        panel.setAttribute("aria-hidden", "true");
+
+        document.body.style.overflow = "";
+
+        const trigger = document.querySelector(".cart-trigger");
+
+        if (trigger) {
+            trigger.focus();
+        }
+    }
+
+
+    // ESCAPE KEY TO CLOSE CART
+    document.addEventListener("keydown", function (event) {
+
+        const panel =
+            document.getElementById("cartPanel");
+
+        if (event.key === "Escape" &&
+            panel &&
+            panel.classList.contains("open")) {
+
+            closeCart();
+        }
+    });
+
+
+    // =====================================
+    // PAGE INITIALIZATION
+    // =====================================
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const productCards =
+            document.querySelectorAll(".product-card");
+
+        const filterContainer =
+            document.getElementById("categoryFilters");
+
+        const categories = new Set();
+
+        // UPDATE SAVED CART USING CURRENT PRODUCT DATA
+        const refreshedCart = [];
+
+        shoppingCart.forEach(savedItem => {
+
+            const button = Array.from(
+                document.querySelectorAll(".product-card .add-btn")
+            ).find(
+                btn => btn.dataset.productId === String(savedItem.id)
+            );
+
+            if (!button) {
+                return;
+            }
+
+            const product = getProductData(button);
+            const quantity = Number(savedItem.quantity);
+
+            if (!Number.isFinite(product.price) ||
+                product.price <= 0 ||
+                !Number.isInteger(product.stock) ||
+                product.stock <= 0 ||
+                !Number.isFinite(quantity) ||
+                quantity < 1) {
+
+                return;
+            }
+
+            refreshedCart.push({
+                ...product,
+                quantity: Math.min(
+                    Math.floor(quantity),
+                    product.stock
+                )
+            });
+        });
+
+        shoppingCart = refreshedCart;
+
+        saveCart();
+        renderCart();
+
+        // FIND ALL CATEGORIES
+        productCards.forEach(card => {
+
+            const category =
+                (card.dataset.category || "").trim();
+
+            if (category !== "") {
+                categories.add(category);
+            }
+        });
+
+        // CREATE CATEGORY FILTER BUTTONS
+        if (filterContainer) {
+
+            categories.forEach(category => {
+
+                const button = document.createElement("button");
+
+                button.type = "button";
+                button.className = "filter";
+
+                button.textContent =
+                    category.charAt(0).toUpperCase() +
+                    category.slice(1);
+
+                button.addEventListener("click", function () {
+                    filterProducts(category, button);
+                });
+
+                filterContainer.appendChild(button);
+            });
+        }
+    });
+
+</script>
+
 
 </body>
 </html>

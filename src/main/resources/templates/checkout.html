@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>GreenMart | Checkout</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: #f7faf7;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #123d2d;
+        }
+
+        header {
+            background: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header a {
+            text-decoration: none;
+            color: #198754;
+            font-weight: bold;
+        }
+
+        main {
+            max-width: 1050px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        h1 { font-size: 36px; }
+
+        .checkout-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 18px;
+            border: 1px solid #e1ebe3;
+        }
+
+        label {
+            display: block;
+            margin: 20px 0 8px;
+            font-weight: 600;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cadccd;
+            border-radius: 10px;
+            font: inherit;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #edf2ed;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            font-weight: bold;
+            font-size: 21px;
+        }
+
+        .place-btn {
+            width: 100%;
+            background: #198754;
+            color: white;
+            padding: 16px;
+            margin-top: 25px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .place-btn:disabled {
+            background: #bdccbf;
+            cursor: not-allowed;
+        }
+
+        .error {
+            background: #ffeaea;
+            color: #a72c2c;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .muted { color: #738478; }
+
+        @media (max-width: 750px) {
+            .checkout-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a th:href="@{/}">🛒 GreenMart</a>
+    <a th:href="@{/}">← Continue Shopping</a>
+</header>
+
+<main>
+
+    <h1>Checkout</h1>
+    <p class="muted">Review your products and delivery details.</p>
+
+    <div class="error"
+         th:if="${error}"
+         th:text="${error}">
+    </div>
+
+    <div class="checkout-layout">
+
+        <section class="card">
+
+            <h2>Delivery Details</h2>
+
+            <form id="checkoutForm"
+                  th:action="@{/checkout/place}"
+                  method="post">
+
+                <label>Full Name</label>
+                <input type="text"
+                       th:value="${fullName}"
+                       readonly>
+
+                <label>Phone Number</label>
+                <input type="tel"
+                       name="deliveryPhone"
+                       th:value="${phone}"
+                       minlength="7"
+                       maxlength="25"
+                       required>
+
+                <label>Delivery Address</label>
+                <textarea name="deliveryAddress"
+                          placeholder="Enter your complete delivery address"
+                          minlength="10"
+                          maxlength="250"
+                          required></textarea>
+
+                <!-- JS inserts cart product IDs and quantities -->
+                <div id="orderInputs"></div>
+
+                <button type="submit"
+                        class="place-btn"
+                        id="placeOrderBtn"
+                        disabled>
+                    Place Order
+                </button>
+
+            </form>
+
+        </section>
+
+        <section class="card">
+
+            <h2>Order Summary</h2>
+
+            <div id="checkoutItems">
+                <p class="muted">Loading cart...</p>
+            </div>
+
+            <div class="total-row">
+                <span>Total</span>
+                <span id="checkoutTotal">Rs. 0.00</span>
+            </div>
+
+            <p class="muted">
+                Orders will be placed with Pending status.
+                Payment is not connected yet.
+            </p>
+
+        </section>
+
+    </div>
+
+</main>
+
+<script th:inline="javascript">
+
+    const checkoutUsername = /*[[${username}]]*/ "";
+    const cartKey = "greenMartCart:" + checkoutUsername;
+
+    const checkoutItems =
+        document.getElementById("checkoutItems");
+
+    const orderInputs =
+        document.getElementById("orderInputs");
+
+    const placeButton =
+        document.getElementById("placeOrderBtn");
+
+    const checkoutForm =
+        document.getElementById("checkoutForm");
+
+    let cart = [];
+
+    try {
+        const saved = JSON.parse(
+            sessionStorage.getItem(cartKey) || "[]"
+        );
+
+        cart = Array.isArray(saved) ? saved : [];
+
+    } catch (error) {
+        cart = [];
+    }
+
+    checkoutItems.replaceChildren();
+    orderInputs.replaceChildren();
+
+    let total = 0;
+
+    cart.forEach(item => {
+
+        const productId = Number(item.id);
+        const quantity = Number(item.quantity);
+        const price = Number(item.price);
+
+        if (!Number.isInteger(productId) ||
+            productId <= 0 ||
+            !Number.isInteger(quantity) ||
+            quantity <= 0 ||
+            !Number.isFinite(price) ||
+            price <= 0) {
+            return;
+        }
+
+        const row = document.createElement("div");
+        row.className = "order-row";
+
+        const name = document.createElement("span");
+        name.textContent = item.name + " × " + quantity;
+
+        const priceText = document.createElement("strong");
+        priceText.textContent =
+            "Rs. " + (price * quantity).toFixed(2);
+
+        row.append(name, priceText);
+        checkoutItems.appendChild(row);
+
+        // Product ID sent to server
+        const idInput = document.createElement("input");
+        idInput.type = "hidden";
+        idInput.name = "productId";
+        idInput.value = productId;
+
+        // Quantity sent to server
+        const qtyInput = document.createElement("input");
+        qtyInput.type = "hidden";
+        qtyInput.name = "quantity";
+        qtyInput.value = quantity;
+
+        orderInputs.append(idInput, qtyInput);
+
+        total += price * quantity;
+    });
+
+    document.getElementById("checkoutTotal")
+        .textContent = "Rs. " + total.toFixed(2);
+
+    const validItemCount =
+        orderInputs.querySelectorAll(
+            'input[name="productId"]'
+        ).length;
+
+    if (validItemCount === 0) {
+
+        checkoutItems.textContent =
+            "Your cart is empty. Please add products first.";
+
+    } else {
+
+        placeButton.disabled = false;
+    }
+
+    checkoutForm.addEventListener("submit", function(event) {
+
+        if (validItemCount === 0) {
+            event.preventDefault();
+            return;
+        }
+
+        placeButton.disabled = true;
+        placeButton.textContent = "Placing Order...";
+    });
+
+</script>
+
+</body>
+</html>
