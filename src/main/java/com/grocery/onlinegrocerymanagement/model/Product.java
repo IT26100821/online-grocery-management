@@ -7,6 +7,7 @@ public class Product {
     private String category;
     private double price;
     private int quantity;
+    private String imageFileName;
 
     // Default Constructor
     public Product() {
@@ -65,4 +66,13 @@ public class Product {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public String getImageFileName() {
+        return imageFileName;
+    }
+
+    public void setImageFileName(String imageFileName) {
+        this.imageFileName = imageFileName;
+    }
+
 }

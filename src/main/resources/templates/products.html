@@ -99,6 +99,66 @@
         .table-wrapper {
             overflow-x: auto;
         }
+
+
+        /* PRODUCT PHOTO UPLOAD DESIGN */
+
+        .product-photo-group {
+            margin-top: 28px;
+            margin-bottom: 30px;
+        }
+
+        .product-photo-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .product-photo-group input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d5e5d9;
+            border-radius: 10px;
+            background: #f8fcf9;
+            cursor: pointer;
+        }
+
+        .photo-hint {
+            display: block;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #738478;
+        }
+
+        /* IMAGE PREVIEW */
+
+        .image-preview-container {
+            margin-top: 22px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f1f8f2;
+            border: 1px dashed #a9d4b8;
+            border-radius: 14px;
+            text-align: center;
+        }
+
+        .preview-title {
+            font-weight: 600;
+            color: #198754;
+            margin-bottom: 15px;
+        }
+
+        .image-preview {
+            width: 210px;
+            max-width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid #d5ebda;
+        }
+
+
     </style>
 </head>
 
@@ -121,9 +181,13 @@
 
         <h2>Add New Product</h2>
 
-        <form th:action="@{/products/add}" method="post">
 
-            <label>Product Name</label>
+        <form th:action="@{/products/add}"
+              method="post"
+              enctype="multipart/form-data">
+
+
+        <label>Product Name</label>
             <input type="text"
                    name="name"
                    placeholder="Enter product name"
@@ -151,9 +215,46 @@
                    placeholder="Enter quantity"
                    required>
 
+
+            <!-- PRODUCT IMAGE UPLOAD -->
+            <div class="form-group product-photo-group">
+
+                <label for="productImage">
+                    📷 Product Photo
+                </label>
+
+                <input type="file"
+                       id="productImage"
+                       name="image"
+                       accept=".jpg,.jpeg,.png,image/jpeg,image/png">
+
+                <small class="photo-hint">
+                    Choose a JPG or PNG image (Maximum 5MB)
+                </small>
+
+                <!-- PHOTO PREVIEW -->
+                <div id="imagePreviewContainer"
+                     class="image-preview-container"
+                     style="display:none;">
+
+                    <p class="preview-title">
+                        Selected Product Photo
+                    </p>
+
+                    <img id="imagePreview"
+                         alt="Product photo preview"
+                         class="image-preview">
+
+                </div>
+
+            </div>
+
+            <!-- ADD PRODUCT BUTTON -->
             <button type="submit">
                 Add Product
             </button>
+
+
 
         </form>
 
@@ -172,7 +273,7 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Product Name</th>
+                    <th>Product Name</th> <th>Photo</th>
                     <th>Category</th>
                     <th>Price</th>
                     <th>Quantity</th>
@@ -187,6 +288,25 @@
                     <td th:text="${product.id}"></td>
 
                     <td th:text="${product.name}"></td>
+
+
+                    <!-- PRODUCT PHOTO -->
+                    <td>
+                        <img th:if="${product.imageFileName != null
+                 and !#strings.isEmpty(product.imageFileName)}"
+                             th:src="@{/product-images/{fileName}(fileName=${product.imageFileName})}"
+                             th:alt="${product.name}"
+                             style="width:65px;
+                height:65px;
+                object-fit:cover;
+                border-radius:10px;">
+
+                        <span th:unless="${product.imageFileName != null
+                      and !#strings.isEmpty(product.imageFileName)}">
+        📦
+    </span>
+                    </td>
+
 
                     <td th:text="${product.category}"></td>
 
@@ -245,6 +365,66 @@
     </div>
 
 </div>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const imageInput =
+            document.getElementById("productImage");
+
+        const preview =
+            document.getElementById("imagePreview");
+
+        const previewContainer =
+            document.getElementById("imagePreviewContainer");
+
+        imageInput.addEventListener("change", function () {
+
+            const file = this.files[0];
+
+            previewContainer.style.display = "none";
+            preview.removeAttribute("src");
+
+            if (!file) {
+                return;
+            }
+
+            // Allow JPG and PNG only
+            if (!["image/jpeg", "image/png"].includes(file.type)) {
+
+                alert("Please select a JPG or PNG image.");
+                this.value = "";
+                return;
+            }
+
+            // Maximum size 5 MB
+            if (file.size > 5 * 1024 * 1024) {
+
+                alert("Image size must be less than 5MB.");
+                this.value = "";
+                return;
+            }
+
+            // Preview selected image
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+
+                preview.src = event.target.result;
+
+                previewContainer.style.display = "block";
+            };
+
+            reader.readAsDataURL(file);
+
+        });
+
+    });
+
+</script>
+
 
 </body>
 </html>

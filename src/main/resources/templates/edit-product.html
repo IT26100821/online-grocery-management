@@ -96,8 +96,11 @@
 
         <h1>✏️ Edit Product</h1>
 
+
         <form th:action="@{/products/update/{id}(id=${product.id})}"
-              method="post">
+              method="post"
+              enctype="multipart/form-data">
+
 
             <label>Product Name</label>
 
@@ -131,6 +134,87 @@
                    th:value="${product.quantity}"
                    required>
 
+
+            <!-- CURRENT SAVED PRODUCT PHOTO -->
+            <div th:if="${product.imageFileName != null
+             and !#strings.isEmpty(product.imageFileName)}"
+                 style="margin-top:25px;
+            padding:20px;
+            background:#f1f8f2;
+            border:1px solid #d5e5d9;
+            border-radius:14px;
+            text-align:center;">
+
+                <p style="color:#198754;
+              font-weight:600;
+              margin-bottom:15px;">
+                    📷 Current Product Photo
+                </p>
+
+                <img th:src="@{/product-images/{fileName}
+                  (fileName=${product.imageFileName})}"
+                     th:alt="${product.name}"
+                     style="width:210px;
+                max-width:100%;
+                height:180px;
+                object-fit:cover;
+                border-radius:12px;">
+
+            </div>
+
+
+            <!-- CHANGE PRODUCT PHOTO -->
+            <div style="margin-top:25px; margin-bottom:25px;">
+
+                <label for="editProductImage">
+                    📷 Change Product Photo
+                </label>
+
+                <input type="file"
+                       id="editProductImage"
+                       name="image"
+                       accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+                       style="margin-top:10px;
+                  padding:14px;
+                  border:1px solid #d5e5d9;
+                  border-radius:10px;
+                  width:100%;">
+
+                <small style="display:block;
+                  margin-top:10px;
+                  color:#777;">
+                    Leave empty to keep the existing photo.
+                    JPG or PNG only (Maximum 5MB).
+                </small>
+
+                <!-- NEW PHOTO PREVIEW -->
+                <div id="editPreviewBox"
+                     style="display:none;
+                margin-top:20px;
+                padding:20px;
+                background:#f1f8f2;
+                border:1px dashed #a9d4b8;
+                border-radius:14px;
+                text-align:center;">
+
+                    <p style="color:#198754;
+                  font-weight:bold;">
+                        New Product Photo Preview
+                    </p>
+
+                    <img id="editImagePreview"
+                         alt="New product photo preview"
+                         style="width:210px;
+                    max-width:100%;
+                    height:180px;
+                    object-fit:cover;
+                    border-radius:12px;">
+
+                </div>
+
+            </div>
+
+
             <button type="submit">
                 Update Product
             </button>
@@ -144,6 +228,129 @@
     </div>
 
 </div>
+
+
+<!-- EDIT PRODUCT IMAGE PREVIEW -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const imageInput =
+            document.getElementById("editProductImage");
+
+        const preview =
+            document.getElementById("editImagePreview");
+
+        const previewBox =
+            document.getElementById("editPreviewBox");
+
+        if (!imageInput || !preview || !previewBox) {
+            return;
+        }
+
+        imageInput.addEventListener("change", function () {
+
+            const file = this.files[0];
+
+            previewBox.style.display = "none";
+            preview.removeAttribute("src");
+
+            if (!file) {
+                return;
+            }
+
+            // Check file type
+            if (!["image/jpeg", "image/png"].includes(file.type)) {
+
+                alert("Only JPG and PNG images are allowed.");
+                this.value = "";
+                return;
+            }
+
+            // Check file size (Maximum 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+
+                alert("Image must be smaller than 5MB.");
+                this.value = "";
+                return;
+            }
+
+            // Display selected image
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+
+                preview.src = event.target.result;
+                previewBox.style.display = "block";
+            };
+
+            reader.readAsDataURL(file);
+
+        });
+
+    });
+</script>
+
+
+<!-- EDIT PRODUCT IMAGE PREVIEW -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const imageInput =
+            document.getElementById("editProductImage");
+
+        const preview =
+            document.getElementById("editImagePreview");
+
+        const previewBox =
+            document.getElementById("editPreviewBox");
+
+        if (!imageInput || !preview || !previewBox) {
+            return;
+        }
+
+        imageInput.addEventListener("change", function () {
+
+            const file = this.files[0];
+
+            previewBox.style.display = "none";
+            preview.removeAttribute("src");
+
+            if (!file) {
+                return;
+            }
+
+            // Check file type
+            if (!["image/jpeg", "image/png"].includes(file.type)) {
+
+                alert("Only JPG and PNG images are allowed.");
+                this.value = "";
+                return;
+            }
+
+            // Check file size (Maximum 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+
+                alert("Image must be smaller than 5MB.");
+                this.value = "";
+                return;
+            }
+
+            // Display selected image
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+
+                preview.src = event.target.result;
+                previewBox.style.display = "block";
+            };
+
+            reader.readAsDataURL(file);
+
+        });
+
+    });
+</script>
+
 
 </body>
 </html>

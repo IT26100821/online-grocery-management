@@ -1,3 +1,4 @@
+
 package com.grocery.onlinegrocerymanagement.service;
 
 import com.grocery.onlinegrocerymanagement.model.Product;
@@ -15,7 +16,8 @@ import java.util.List;
 @Service
 public class ProductService {
 
-    private final Path filePath = Paths.get("data", "products.txt");
+    private final Path filePath =
+            Paths.get("data", "products.txt");
 
     // READ - View All Products
     public synchronized List<Product> getAllProducts() {
@@ -53,15 +55,27 @@ public class ProductService {
     }
 
     // UPDATE - Edit Product
-    public synchronized void updateProduct(int id, Product updatedProduct) {
+    public synchronized void updateProduct(
+            int id, Product updatedProduct) {
 
         List<Product> products = loadProducts();
 
         for (int i = 0; i < products.size(); i++) {
 
-            if (products.get(i).getId() == id) {
+            Product existingProduct = products.get(i);
+
+            if (existingProduct.getId() == id) {
 
                 updatedProduct.setId(id);
+
+                // Keep existing image if no new image supplied
+                if (updatedProduct.getImageFileName() == null
+                        || updatedProduct.getImageFileName().isBlank()) {
+
+                    updatedProduct.setImageFileName(
+                            existingProduct.getImageFileName()
+                    );
+                }
 
                 products.set(i, updatedProduct);
 
@@ -70,7 +84,9 @@ public class ProductService {
             }
         }
 
-        throw new IllegalArgumentException("Product not found");
+        throw new IllegalArgumentException(
+                "Product not found"
+        );
     }
 
     // DELETE - Delete Product
@@ -87,7 +103,7 @@ public class ProductService {
         }
     }
 
-    // Load Products From Text File
+    // LOAD PRODUCTS FROM TEXT FILE
     private List<Product> loadProducts() {
 
         List<Product> products = new ArrayList<>();
@@ -99,7 +115,8 @@ public class ProductService {
         try {
 
             List<String> lines = Files.readAllLines(
-                    filePath, StandardCharsets.UTF_8
+                    filePath,
+                    StandardCharsets.UTF_8
             );
 
             for (String line : lines) {
@@ -110,7 +127,9 @@ public class ProductService {
 
                 String[] data = line.split("\\|", -1);
 
-                if (data.length != 5) {
+                // Support old 5 fields and new 6 fields
+                if (data.length != 5 && data.length != 6) {
+
                     throw new IllegalStateException(
                             "Invalid product data: " + line
                     );
@@ -124,10 +143,17 @@ public class ProductService {
                         Integer.parseInt(data[4])
                 );
 
+                // Load image filename if available
+                if (data.length == 6 && !data[5].isBlank()) {
+
+                    product.setImageFileName(data[5]);
+                }
+
                 products.add(product);
             }
 
         } catch (IOException e) {
+
             throw new UncheckedIOException(
                     "Error reading products file", e
             );
@@ -136,7 +162,7 @@ public class ProductService {
         return products;
     }
 
-    // Save Products To Text File
+    // SAVE PRODUCTS TO TEXT FILE
     private void saveProducts(List<Product> products) {
 
         try {
@@ -152,7 +178,8 @@ public class ProductService {
                                 clean(product.getName()) + "|" +
                                 clean(product.getCategory()) + "|" +
                                 product.getPrice() + "|" +
-                                product.getQuantity();
+                                product.getQuantity() + "|" +
+                                clean(product.getImageFileName());
 
                 lines.add(line);
             }
@@ -164,6 +191,7 @@ public class ProductService {
             );
 
         } catch (IOException e) {
+
             throw new UncheckedIOException(
                     "Error saving products file", e
             );
@@ -182,4 +210,3 @@ public class ProductService {
                 .replace("\r", " ");
     }
 }
-
